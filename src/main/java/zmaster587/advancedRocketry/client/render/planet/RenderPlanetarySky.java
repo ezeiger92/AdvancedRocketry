@@ -391,8 +391,6 @@ public class RenderPlanetarySky extends IRenderHandler {
 		GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 
 		float multiplier = (2-atmosphere)/2f;//atmosphere > 1 ? (2-atmosphere) : 1f;
-		if(mc.world.isRainingAt(mc.player.getPosition().add(0, 199, 0)))
-			multiplier *= 1-mc.world.getRainStrength(partialTicks);
 
 		GL11.glRotatef((float)myRotationalPhi, 0f, 1f, 0f);
 
