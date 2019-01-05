@@ -607,6 +607,7 @@ public class TileWarpShipMonitor extends TileEntity implements ITickable, IModul
 		else if(id == 1)
 			return dimCache.orbitalDist/2;
 		else if(id == 2)
+			// TODO: Also what is THIS doing?
 			return (int) (dimCache.getGravitationalMultiplier()*50);
 		else if(id == 3) {
 			return MAX_PROGRESS;

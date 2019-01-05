@@ -566,23 +566,23 @@ public class RenderPlanetarySky extends IRenderHandler {
 			GL11.glPopMatrix();
 		}
 
-		for(DimensionProperties moons : children) {
+		for(DimensionProperties moon : children) {
 			GL11.glPushMatrix();
 
-			moons.orbitalPhi = 10;
-			double rot = ((partialTicks*moons.orbitTheta + ((1-partialTicks)*moons.prevOrbitalTheta)) * 180F/Math.PI);
+			moon.orbitalPhi = 10;
+			double rot = ((partialTicks*moon.orbitTheta + ((1-partialTicks)*moon.prevOrbitalTheta)) * 180F/Math.PI);
 
-			GL11.glRotatef((float)moons.orbitalPhi, 0f, 0f, 1f);
+			GL11.glRotatef((float)moon.orbitalPhi, 0f, 0f, 1f);
 			GL11.glRotated(rot, 1f, 0f, 0f);
 
 			//Close enough approximation, I missed something but seems to off by no more than 30*
 			//Nobody will look
-			float phiAngle = (float)((moons.orbitalPhi) * Math.PI/180f);
-			double x = -MathHelper.sin(phiAngle)*MathHelper.cos((float)moons.orbitTheta);
-			double y = MathHelper.sin((float)moons.orbitTheta);
-			double rotation = -Math.PI/2f + Math.atan2(x, y) - (moons.orbitTheta - Math.PI)*MathHelper.sin(phiAngle);
+			float phiAngle = (float)((moon.orbitalPhi) * Math.PI/180f);
+			double x = -MathHelper.sin(phiAngle)*MathHelper.cos((float)moon.orbitTheta);
+			double y = MathHelper.sin((float)moon.orbitTheta);
+			double rotation = -Math.PI/2f + Math.atan2(x, y) - (moon.orbitTheta - Math.PI)*MathHelper.sin(phiAngle);
 
-			renderPlanet(buffer, moons, (1/(float)moons.getParentOrbitalDistance())*moons.getGravitationalMultiplier(), multiplier, rotation, moons.hasAtmosphere(), moons.hasRings);
+			renderPlanet(buffer, moon, moon.getParentOrbitalDistance(), multiplier, rotation, moon.hasAtmosphere(), moon.hasRings);
 			GL11.glPopMatrix();
 		}
 

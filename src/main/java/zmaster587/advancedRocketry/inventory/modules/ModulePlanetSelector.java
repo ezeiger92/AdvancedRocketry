@@ -226,7 +226,7 @@ public class ModulePlanetSelector extends ModuleContainerPan implements IButtonI
 	@SideOnly(Side.CLIENT)
 	private void renderPlanetarySystem(DimensionProperties planet, int posX, int posY, float distanceZoomMultiplier, float planetSizeMultiplier) {
 
-		int displaySize = Math.max((int)(planetSizeMultiplier*planet.getGravitationalMultiplier()/.02f), 7);
+		int displaySize = Math.max((int)(planetSizeMultiplier*planet.getSize()/.02f), 7);
 
 		int offsetX = (int)(distanceZoomMultiplier*posX) - displaySize/2; 
 		int offsetY = (int)(distanceZoomMultiplier*posY) - displaySize/2; 
@@ -255,7 +255,7 @@ public class ModulePlanetSelector extends ModuleContainerPan implements IButtonI
 	@SideOnly(Side.CLIENT)
 	private void renderPlanets(DimensionProperties planet, int parentOffsetX, int parentOffsetY, int parentRadius, float distanceMultiplier, float planetSizeMultiplier) {
 
-		int displaySize = Math.max((int)(planetSizeMultiplier*planet.getGravitationalMultiplier()/.02f),7);
+		int displaySize = Math.max((int)(planetSizeMultiplier*planet.getSize()/.02f),7);
 
 		int offsetX = parentOffsetX + (int)(Math.cos(planet.orbitTheta)*((planet.orbitalDist*distanceMultiplier) + parentRadius)) - displaySize/2;
 		int offsetY = parentOffsetY + (int)(Math.sin(planet.orbitTheta)*((planet.orbitalDist*distanceMultiplier) + parentRadius)) - displaySize/2;
