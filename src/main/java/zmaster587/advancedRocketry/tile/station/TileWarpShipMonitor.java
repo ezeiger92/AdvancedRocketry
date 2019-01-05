@@ -112,10 +112,10 @@ public class TileWarpShipMonitor extends TileEntity implements ITickable, IModul
 
 			//TODO: actual trig
 			if(properties.getStar().getId() == destProperties.getStar().getId()) {
-				double x1 = properties.getOrbitalDist()*MathHelper.cos((float) properties.orbitTheta);
-				double y1 = properties.getOrbitalDist()*MathHelper.sin((float) properties.orbitTheta);
-				double x2 = destProperties.getOrbitalDist()*MathHelper.cos((float) destProperties.orbitTheta);
-				double y2 = destProperties.getOrbitalDist()*MathHelper.sin((float) destProperties.orbitTheta);
+				double x1 = properties.getOrbitalDist()*MathHelper.cos((float) properties.getOrbitTheta());
+				double y1 = properties.getOrbitalDist()*MathHelper.sin((float) properties.getOrbitTheta());
+				double x2 = destProperties.getOrbitalDist()*MathHelper.cos((float) destProperties.getOrbitTheta());
+				double y2 = destProperties.getOrbitalDist()*MathHelper.sin((float) destProperties.getOrbitTheta());
 
 				return Math.max((int)Math.sqrt(Math.pow((x1 - x2),2) + Math.pow((y1 - y2),2)),1);
 

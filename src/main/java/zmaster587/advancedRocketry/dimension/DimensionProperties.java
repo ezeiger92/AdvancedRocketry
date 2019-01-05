@@ -198,9 +198,9 @@ public class DimensionProperties implements Cloneable, IDimensionProperties {
 	public int averageTemperature;
 	public int rotationalPeriod;
 	//Stored in radians
-	public double orbitTheta;
+	private double orbitTheta;
 	private double initialTheta = 0;
-	public double prevOrbitalTheta;
+	private double prevOrbitalTheta;
 	private double orbitalPhi;
 	public double rotationalPhi;
 	public OreGenProperties oreProperties = null;
@@ -1569,6 +1569,11 @@ public class DimensionProperties implements Cloneable, IDimensionProperties {
 	@Override
 	public double getOrbitTheta() {
 		return orbitTheta;
+	}
+
+	@Override
+	public double getPreviousOrbitTheta() {
+		return prevOrbitalTheta;
 	}
 	
 	@Override

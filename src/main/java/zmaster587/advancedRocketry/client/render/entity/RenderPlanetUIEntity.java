@@ -83,7 +83,7 @@ public class RenderPlanetUIEntity extends Render<EntityUIPlanet> implements IRen
 		GL11.glPushMatrix();
 		GL11.glScalef(1.1f, 1.1f, 1.1f);
 		GL11.glRotatef(90, 0, 0, 1);
-		GL11.glRotated( -(properties.orbitTheta * 180/Math.PI), 1, 0, 0);
+		GL11.glRotated( -Math.toDegrees(properties.getOrbitTheta()), 1, 0, 0);
 		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 0, 0);
 		Minecraft.getMinecraft().renderEngine.bindTexture(DimensionProperties.shadow3);
 		GlStateManager.color(.1f, .1f, .1f,0.75f);

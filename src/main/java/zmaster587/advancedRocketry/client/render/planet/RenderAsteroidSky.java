@@ -259,9 +259,9 @@ public class RenderAsteroidSky extends IRenderHandler {
 			axis.z = (float) dir.getFrontOffsetZ();
 
 			myPhi = properties.getOrbitalPhi();
-			myTheta = properties.orbitTheta;
+			myTheta = properties.getOrbitTheta();
 			myRotationalPhi = properties.rotationalPhi;
-			myPrevOrbitalTheta = properties.prevOrbitalTheta;
+			myPrevOrbitalTheta = properties.getPreviousOrbitTheta();
 			hasRings = properties.hasRings();
 			ringColor = properties.ringColor;
 
@@ -307,9 +307,9 @@ public class RenderAsteroidSky extends IRenderHandler {
 			axis.z = (float) dir.getFrontOffsetZ();
 
 			myPhi = properties.getOrbitalPhi();
-			myTheta = properties.orbitTheta;
+			myTheta = properties.getOrbitTheta();
 			myRotationalPhi = properties.rotationalPhi;
-			myPrevOrbitalTheta = properties.prevOrbitalTheta;
+			myPrevOrbitalTheta = properties.getPreviousOrbitTheta();
 			hasRings = properties.hasRings();
 			ringColor = properties.ringColor;
 
@@ -642,7 +642,7 @@ public class RenderAsteroidSky extends IRenderHandler {
 		for(DimensionProperties moons : children) {
 			GL11.glPushMatrix();
 
-			double rot = ((partialTicks*moons.orbitTheta + ((1-partialTicks)*moons.prevOrbitalTheta)) * 180F/Math.PI);
+			double rot = ((partialTicks*moons.getOrbitTheta() + ((1-partialTicks)*moons.getPreviousOrbitTheta())) * 180F/Math.PI);
 
 			GL11.glRotatef((float)Math.toDegrees(moons.getOrbitalPhi()), 0f, 0f, 1f);
 			GL11.glRotated(rot, 1f, 0f, 0f);
@@ -650,9 +650,9 @@ public class RenderAsteroidSky extends IRenderHandler {
 			//Close enough approximation, I missed something but seems to off by no more than 30*
 			//Nobody will look
 			float phiAngle = (float)moons.getOrbitalPhi();
-			double x = -MathHelper.sin(phiAngle)*MathHelper.cos((float)moons.orbitTheta);
-			double y = MathHelper.sin((float)moons.orbitTheta);
-			double rotation = -Math.PI/2f + Math.atan2(x, y) - (moons.orbitTheta - Math.PI)*MathHelper.sin(phiAngle);
+			double x = -MathHelper.sin(phiAngle)*MathHelper.cos((float)moons.getOrbitTheta());
+			double y = MathHelper.sin((float)moons.getOrbitTheta());
+			double rotation = -Math.PI/2f + Math.atan2(x, y) - (moons.getOrbitTheta() - Math.PI)*MathHelper.sin(phiAngle);
 
 
 			//double x = -MathHelper.sin(phiAngle)*MathHelper.cos((float)moons.orbitTheta);

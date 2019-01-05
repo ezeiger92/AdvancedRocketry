@@ -156,6 +156,11 @@ public interface IDimensionProperties {
 	public double getOrbitTheta();
 
 	/**
+	 * @return the last location along the orbit in radians
+	 */
+	public double getPreviousOrbitTheta();
+
+	/**
 	 * @return the orbit's phi in radians
 	 */
 	public double getOrbitalPhi();

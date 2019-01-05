@@ -193,9 +193,9 @@ public class RenderPlanetarySky extends IRenderHandler {
 			axis.z = (float) dir.getFrontOffsetZ();
 
 			myPhi = properties.getOrbitalPhi();
-			myTheta = properties.orbitTheta;
+			myTheta = properties.getOrbitTheta();
 			myRotationalPhi = properties.rotationalPhi;
-			myPrevOrbitalTheta = properties.prevOrbitalTheta;
+			myPrevOrbitalTheta = properties.getPreviousOrbitTheta();
 			hasRings = properties.hasRings();
 			ringColor = properties.ringColor;
 
@@ -246,9 +246,9 @@ public class RenderPlanetarySky extends IRenderHandler {
 			axis.z = (float) dir.getFrontOffsetZ();
 
 			myPhi = properties.getOrbitalPhi();
-			myTheta = properties.orbitTheta;
+			myTheta = properties.getOrbitTheta();
 			myRotationalPhi = properties.rotationalPhi;
-			myPrevOrbitalTheta = properties.prevOrbitalTheta;
+			myPrevOrbitalTheta = properties.getPreviousOrbitTheta();
 			hasRings = properties.hasRings();
 			ringColor = properties.ringColor;
 
@@ -570,7 +570,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 		for(DimensionProperties moon : children) {
 			GL11.glPushMatrix();
 
-			double rot = (partialTicks*moon.orbitTheta + (1 - partialTicks) * moon.prevOrbitalTheta);
+			double rot = (partialTicks*moon.getOrbitTheta() + (1 - partialTicks) * moon.getPreviousOrbitTheta());
 
 			GL11.glRotatef((float)Math.toDegrees(moon.getOrbitalPhi()), 0f, 0f, 1f);
 			GL11.glRotated(rot, 1f, 0f, 0f);
@@ -579,9 +579,9 @@ public class RenderPlanetarySky extends IRenderHandler {
 			//Nobody will look
 			// I looked, and you missed mixing radians and degrees. <3 -Erik
 			float phiAngle = (float)moon.getOrbitalPhi();
-			double x = -MathHelper.sin(phiAngle)*MathHelper.cos((float)moon.orbitTheta);
-			double y = MathHelper.sin((float)moon.orbitTheta);
-			double rotation = -Math.PI/2f + Math.atan2(x, y) - (moon.orbitTheta - Math.PI)*MathHelper.sin(phiAngle);
+			double x = -MathHelper.sin(phiAngle)*MathHelper.cos((float)moon.getOrbitTheta());
+			double y = MathHelper.sin((float)moon.getOrbitTheta());
+			double rotation = -Math.PI/2f + Math.atan2(x, y) - (moon.getOrbitTheta() - Math.PI)*MathHelper.sin(phiAngle);
 
 			renderPlanet(buffer, moon, moon.getParentOrbitalDistance(), multiplier, rotation);
 			GL11.glPopMatrix();
@@ -847,6 +847,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 			
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 			
+			// TODO: This changes position slightly based on time of day; inspect
 			//Render accretion disk
 			mc.renderEngine.bindTexture(TextureResources.locationAccretionDisk);
 			GlStateManager.depthMask(false);

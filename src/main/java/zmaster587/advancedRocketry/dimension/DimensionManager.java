@@ -356,7 +356,7 @@ public class DimensionManager implements IGalaxy {
 			properties.setInitialTheta(Math.toRadians(random.nextInt(360)));
 
 			for(IDimensionProperties properties2 : getStar(starId).getPlanets()) {
-				double dist = Math.abs(((DimensionProperties)properties2).orbitTheta - properties.orbitTheta);
+				double dist = Math.abs(((DimensionProperties)properties2).getOrbitTheta() - properties.getOrbitTheta());
 				if(dist < minDistance)
 					minDistance = dist;
 			}
