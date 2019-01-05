@@ -192,7 +192,7 @@ public class DimensionProperties implements Cloneable, IDimensionProperties {
 	public float[] fogColor;
 	public float[] ringColor;
 	private float gravitationalMultiplier;
-	public int orbitalDist;
+	private int orbitalDist;
 	private int originalAtmosphereDensity;
 	private int atmosphereDensity;
 	public int averageTemperature;
@@ -1565,6 +1565,11 @@ public class DimensionProperties implements Cloneable, IDimensionProperties {
 	@Override
 	public int getOrbitalDist() {
 		return orbitalDist;
+	}
+	
+	@Override
+	public void setOrbitalDist(int dist) {
+		this.orbitalDist = dist;
 	}
 	
 	public int getSeaLevel() {

@@ -293,7 +293,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 			isMoon = false;
 			hasAtmosphere = DimensionManager.overworldProperties.hasAtmosphere();
 			atmosphere = DimensionManager.overworldProperties.getAtmosphereDensityAtHeight(mc.getRenderViewEntity().posY);
-			solarOrbitalDistance = DimensionManager.overworldProperties.orbitalDist;
+			solarOrbitalDistance = DimensionManager.overworldProperties.getOrbitalDist();
 			sunColor = new Vec3d(1, 1, 1);
 			primaryStar = DimensionManager.overworldProperties.getStar();
 			properties = DimensionManager.overworldProperties;

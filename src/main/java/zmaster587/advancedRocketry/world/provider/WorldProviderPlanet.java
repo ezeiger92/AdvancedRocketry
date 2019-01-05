@@ -348,7 +348,7 @@ public class WorldProviderPlanet extends WorldProvider implements IPlanetaryProv
 
 	@Override
 	public int getOrbitalDistance(BlockPos pos) {
-		return getDimensionProperties(pos).orbitalDist;
+		return getDimensionProperties(pos).getOrbitalDist();
 	}
 
 	@Override

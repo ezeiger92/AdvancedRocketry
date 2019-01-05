@@ -112,10 +112,10 @@ public class TileWarpShipMonitor extends TileEntity implements ITickable, IModul
 
 			//TODO: actual trig
 			if(properties.getStar().getId() == destProperties.getStar().getId()) {
-				double x1 = properties.orbitalDist*MathHelper.cos((float) properties.orbitTheta);
-				double y1 = properties.orbitalDist*MathHelper.sin((float) properties.orbitTheta);
-				double x2 = destProperties.orbitalDist*MathHelper.cos((float) destProperties.orbitTheta);
-				double y2 = destProperties.orbitalDist*MathHelper.sin((float) destProperties.orbitTheta);
+				double x1 = properties.getOrbitalDist()*MathHelper.cos((float) properties.orbitTheta);
+				double y1 = properties.getOrbitalDist()*MathHelper.sin((float) properties.orbitTheta);
+				double x2 = destProperties.getOrbitalDist()*MathHelper.cos((float) destProperties.orbitTheta);
+				double y2 = destProperties.getOrbitalDist()*MathHelper.sin((float) destProperties.orbitTheta);
 
 				return Math.max((int)Math.sqrt(Math.pow((x1 - x2),2) + Math.pow((y1 - y2),2)),1);
 
@@ -605,7 +605,7 @@ public class TileWarpShipMonitor extends TileEntity implements ITickable, IModul
 		if(id == 0)
 			return dimCache.getAtmosphereDensity()/2;
 		else if(id == 1)
-			return dimCache.orbitalDist/2;
+			return dimCache.getOrbitalDist()/2;
 		else if(id == 2)
 			// TODO: Also what is THIS doing?
 			return (int) (dimCache.getGravitationalMultiplier()*50);

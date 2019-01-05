@@ -1845,7 +1845,7 @@ public class AdvancedRocketry {
 					dimensionProperties.rotationalPeriod = 128000;
 					dimensionProperties.setGravitationalMultiplier(.166f); //Actual moon value
 					dimensionProperties.setName("Luna");
-					dimensionProperties.orbitalDist = 150;
+					dimensionProperties.setOrbitalDist(150);
 					dimensionProperties.addBiome(AdvancedRocketryBiomes.moonBiome);
 					dimensionProperties.addBiome(AdvancedRocketryBiomes.moonBiomeDark);
 					

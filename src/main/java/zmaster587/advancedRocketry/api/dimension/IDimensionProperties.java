@@ -159,6 +159,11 @@ public interface IDimensionProperties {
 	 * @return distance of the planet from sun or moon in the range 0 to 200
 	 */
 	public int getOrbitalDist();
+	
+	/**
+	 * sets the orbital distance in the range 0 to 200
+	 */
+	public void setOrbitalDist(int dist);
 
 	
 	/**

@@ -257,8 +257,8 @@ public class ModulePlanetSelector extends ModuleContainerPan implements IButtonI
 
 		int displaySize = Math.max((int)(planetSizeMultiplier*planet.getSize()/.02f),7);
 
-		int offsetX = parentOffsetX + (int)(Math.cos(planet.orbitTheta)*((planet.orbitalDist*distanceMultiplier) + parentRadius)) - displaySize/2;
-		int offsetY = parentOffsetY + (int)(Math.sin(planet.orbitTheta)*((planet.orbitalDist*distanceMultiplier) + parentRadius)) - displaySize/2;
+		int offsetX = parentOffsetX + (int)(Math.cos(planet.orbitTheta)*((planet.getOrbitalDist()*distanceMultiplier) + parentRadius)) - displaySize/2;
+		int offsetY = parentOffsetY + (int)(Math.sin(planet.orbitTheta)*((planet.getOrbitalDist()*distanceMultiplier) + parentRadius)) - displaySize/2;
 
 		ModuleButton button;
 

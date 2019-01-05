@@ -143,7 +143,7 @@ public class TilePlanetSelector extends TilePointer implements ISelectionNotify,
 		if(id == 0)
 			return dimCache.getAtmosphereDensity()/2;
 		else if(id == 1)
-			return dimCache.orbitalDist/2;
+			return dimCache.getOrbitalDist()/2;
 		else //if(id == 2)
 			// TODO: What is this doing?
 			return (int) (dimCache.getGravitationalMultiplier()*50);

@@ -263,7 +263,7 @@ public class XMLPlanetLoader {
 			else if(planetPropertyNode.getNodeName().equalsIgnoreCase("orbitaldistance")) {
 
 				try {
-					properties.orbitalDist = Math.min(Math.max(Integer.parseInt(planetPropertyNode.getTextContent()), DimensionProperties.MIN_DISTANCE), DimensionProperties.MAX_DISTANCE);
+					properties.setOrbitalDist(Math.min(Math.max(Integer.parseInt(planetPropertyNode.getTextContent()), DimensionProperties.MIN_DISTANCE), DimensionProperties.MAX_DISTANCE));
 				} catch (NumberFormatException e) {
 					AdvancedRocketry.logger.warn("Invalid orbitalDist specified"); //TODO: more detailed error msg
 				}
