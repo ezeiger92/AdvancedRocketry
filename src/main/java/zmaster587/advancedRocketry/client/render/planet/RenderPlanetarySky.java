@@ -390,7 +390,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 		GL11.glTranslatef(0.0F, 0.0F, 0.0F);
 		GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 
-		float multiplier = (2-atmosphere)/2f;//atmosphere > 1 ? (2-atmosphere) : 1f;
+		float multiplier = (2-atmosphere)/2f * skyVisibility;//atmosphere > 1 ? (2-atmosphere) : 1f;
 
 		GL11.glRotatef((float)myRotationalPhi, 0f, 1f, 0f);
 
@@ -607,7 +607,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 			double f10 = -bound;
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 
-			// Render darker skybox below horizon. Probably.
+			// TODO: Figure out what this is
 			buffer.color(0,0,0,1f);
 			buffer.pos(-bound, f9,   bound).endVertex();
 			buffer.pos( bound, f9,   bound).endVertex();
@@ -714,7 +714,39 @@ public class RenderPlanetarySky extends IRenderHandler {
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(locationX, zLevel, locationY);
+		
+		Minecraft.getMinecraft().renderEngine.bindTexture(icon);
+		// Mask behind planet to block out stars
+		{
+			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+			
+			float adjustedMultiplier = Math.min((float)Math.pow(alphaMultiplier, .75f) * 2.4f, 1.0f);
 
+			// TODO: Sky color here
+			GlStateManager.color(0f, 0f, 0f, adjustedMultiplier);
+			buffer.pos(-f10, zLevel - 0.005f, f10).tex((double)f16, (double)f17).endVertex();
+			buffer.pos(f10, zLevel - 0.005f, f10).tex((double)f14, (double)f17).endVertex();
+			buffer.pos(f10, zLevel - 0.005f, -f10).tex((double)f14, (double)f15).endVertex();
+			buffer.pos(-f10, zLevel - 0.005f, -f10).tex((double)f16, (double)f15).endVertex();
+			Tessellator.getInstance().draw();
+		}
+		
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		//TODO: draw sky planets
+
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+
+		GlStateManager.color(1f, 1f, 1f, alphaMultiplier);
+		buffer.pos(-f10, zLevel, f10).tex((double)f16, (double)f17).endVertex();
+		buffer.pos(f10, zLevel, f10).tex((double)f14, (double)f17).endVertex();
+		buffer.pos(f10, zLevel, -f10).tex((double)f14, (double)f15).endVertex();
+		buffer.pos(-f10, zLevel, -f10).tex((double)f16, (double)f15).endVertex();
+		Tessellator.getInstance().draw();
+		//buffer.finishDrawing();
+
+		//GL11.glEnable(GL11.GL_BLEND);
+		
 		if (hasDecorators) {
 			//ATM Glow
 			GL11.glPushMatrix();
@@ -744,6 +776,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 				Tessellator.getInstance().draw();
 			}
 
+			// Render bright crecent 
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 			Minecraft.getMinecraft().renderEngine.bindTexture(DimensionProperties.atmGlow);
@@ -758,22 +791,6 @@ public class RenderPlanetarySky extends IRenderHandler {
 		}
 
 		//End ATM glow
-
-		Minecraft.getMinecraft().renderEngine.bindTexture(icon);
-		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		//TODO: draw sky planets
-
-		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-
-		GlStateManager.color(1f, 1f, 1f, alphaMultiplier);
-		buffer.pos(-f10, zLevel, f10).tex((double)f16, (double)f17).endVertex();
-		buffer.pos(f10, zLevel, f10).tex((double)f14, (double)f17).endVertex();
-		buffer.pos(f10, zLevel, -f10).tex((double)f14, (double)f15).endVertex();
-		buffer.pos(-f10, zLevel, -f10).tex((double)f16, (double)f15).endVertex();
-		Tessellator.getInstance().draw();
-		//buffer.finishDrawing();
-
-		//GL11.glEnable(GL11.GL_BLEND);
 
 		if (hasDecorators) {
 			//Draw atmosphere if applicable
