@@ -191,7 +191,7 @@ public class DimensionProperties implements Cloneable, IDimensionProperties {
 	public float[] skyColor;
 	public float[] fogColor;
 	public float[] ringColor;
-	public float gravitationalMultiplier;
+	private float gravitationalMultiplier;
 	public int orbitalDist;
 	private int originalAtmosphereDensity;
 	private int atmosphereDensity;
@@ -339,6 +339,17 @@ public class DimensionProperties implements Cloneable, IDimensionProperties {
 	@Override
 	public void setGravitationalMultiplier(float mult) {
 		gravitationalMultiplier = mult;
+	}
+
+	// TODO: SIZE
+	@Override
+	public float getSize() {
+		return getGravitationalMultiplier();
+	}
+
+	@Override
+	public void setSize(float size) {
+		gravitationalMultiplier = size;
 	}
 
 	public List<SpawnListEntryNBT> getSpawnListEntries() {

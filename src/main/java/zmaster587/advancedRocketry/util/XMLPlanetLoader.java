@@ -255,7 +255,7 @@ public class XMLPlanetLoader {
 			else if(planetPropertyNode.getNodeName().equalsIgnoreCase("gravitationalmultiplier")) {
 
 				try {
-					properties.gravitationalMultiplier = Math.min(Math.max(Integer.parseInt(planetPropertyNode.getTextContent()), DimensionProperties.MIN_GRAVITY), DimensionProperties.MAX_GRAVITY)/100f;
+					properties.setGravitationalMultiplier(Math.min(Math.max(Integer.parseInt(planetPropertyNode.getTextContent()), DimensionProperties.MIN_GRAVITY), DimensionProperties.MAX_GRAVITY)/100f);
 				} catch (NumberFormatException e) {
 					AdvancedRocketry.logger.warn("Invalid gravitationalMultiplier specified"); //TODO: more detailed error msg
 				}

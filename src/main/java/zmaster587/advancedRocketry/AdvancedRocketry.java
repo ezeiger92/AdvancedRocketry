@@ -1843,7 +1843,7 @@ public class AdvancedRocketry {
 					dimensionProperties.setAtmosphereDensityDirect(0);
 					dimensionProperties.averageTemperature = 20;
 					dimensionProperties.rotationalPeriod = 128000;
-					dimensionProperties.gravitationalMultiplier = .166f; //Actual moon value
+					dimensionProperties.setGravitationalMultiplier(.166f); //Actual moon value
 					dimensionProperties.setName("Luna");
 					dimensionProperties.orbitalDist = 150;
 					dimensionProperties.addBiome(AdvancedRocketryBiomes.moonBiome);
@@ -2070,11 +2070,11 @@ public class AdvancedRocketry {
 			DimensionProperties	properties = DimensionManager.getInstance().generateRandomGasGiant(star.getId(), "",baseDistance + 50,baseAtm,125,100,100,75);
 
 			dimPropList.add(properties);
-			if(properties.gravitationalMultiplier >= 1f) {
+			if(properties.getGravitationalMultiplier() >= 1f) {
 				int numMoons = random.nextInt(8);
 
 				for(int ii = 0; ii < numMoons; ii++) {
-					DimensionProperties moonProperties = DimensionManager.getInstance().generateRandom(star.getId(), properties.getName() + ": " + ii, 25,100, (int)(properties.gravitationalMultiplier/.02f), 25, 100, 50);
+					DimensionProperties moonProperties = DimensionManager.getInstance().generateRandom(star.getId(), properties.getName() + ": " + ii, 25,100, (int)(properties.getGravitationalMultiplier()/.02f), 25, 100, 50);
 					if(moonProperties == null)
 						continue;
 
@@ -2110,11 +2110,11 @@ public class AdvancedRocketry {
 
 			dimPropList.add(properties);
 
-			if(properties.gravitationalMultiplier >= 1f) {
+			if(properties.getGravitationalMultiplier() >= 1f) {
 				int numMoons = random.nextInt(4);
 
 				for(int ii = 0; ii < numMoons; ii++) {
-					DimensionProperties moonProperties = DimensionManager.getInstance().generateRandom(star.getId(), properties.getName() + ": " + ii, 25,100, (int)(properties.gravitationalMultiplier/.02f), 25, 100, 50);
+					DimensionProperties moonProperties = DimensionManager.getInstance().generateRandom(star.getId(), properties.getName() + ": " + ii, 25,100, (int)(properties.getGravitationalMultiplier()/.02f), 25, 100, 50);
 
 					if(moonProperties == null)
 						continue;

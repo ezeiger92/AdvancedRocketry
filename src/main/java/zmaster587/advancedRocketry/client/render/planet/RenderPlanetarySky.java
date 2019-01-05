@@ -582,7 +582,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 			double y = MathHelper.sin((float)moons.orbitTheta);
 			double rotation = -Math.PI/2f + Math.atan2(x, y) - (moons.orbitTheta - Math.PI)*MathHelper.sin(phiAngle);
 
-			renderPlanet(buffer, moons, (1/(float)moons.getParentOrbitalDistance())*moons.gravitationalMultiplier, multiplier, rotation, moons.hasAtmosphere(), moons.hasRings);
+			renderPlanet(buffer, moons, (1/(float)moons.getParentOrbitalDistance())*moons.getGravitationalMultiplier(), multiplier, rotation, moons.hasAtmosphere(), moons.hasRings);
 			GL11.glPopMatrix();
 		}
 

@@ -96,7 +96,7 @@ public class DimensionManager implements IGalaxy {
 		overworldProperties = new DimensionProperties(0);
 		overworldProperties.setAtmosphereDensityDirect(100);
 		overworldProperties.averageTemperature = 100;
-		overworldProperties.gravitationalMultiplier = 1f;
+		overworldProperties.setGravitationalMultiplier(1f);
 		overworldProperties.orbitalDist = 100;
 		overworldProperties.skyColor = new float[] {1f, 1f, 1f};
 		overworldProperties.setName("Earth");
@@ -105,7 +105,7 @@ public class DimensionManager implements IGalaxy {
 		defaultSpaceDimensionProperties = new DimensionProperties(SpaceObjectManager.WARPDIMID, false);
 		defaultSpaceDimensionProperties.setAtmosphereDensityDirect(0);
 		defaultSpaceDimensionProperties.averageTemperature = 0;
-		defaultSpaceDimensionProperties.gravitationalMultiplier = 0.1f;
+		defaultSpaceDimensionProperties.setGravitationalMultiplier(0.1f);
 		defaultSpaceDimensionProperties.orbitalDist = 100;
 		defaultSpaceDimensionProperties.skyColor = new float[] {0f,0f,0f};
 		defaultSpaceDimensionProperties.setName("Space");
@@ -260,7 +260,7 @@ public class DimensionManager implements IGalaxy {
 		properties.setAtmosphereDensityDirect(MathHelper.clamp(baseAtmosphere + random.nextInt(atmosphereFactor) - atmosphereFactor/2, 0, 200)); 
 		int newDist = properties.orbitalDist = MathHelper.clamp(baseDistance + random.nextInt(distanceFactor),0,200);
 
-		properties.gravitationalMultiplier = Math.min(Math.max(0.05f,(baseGravity + random.nextInt(gravityFactor) - gravityFactor/2)/100f), 1.3f);
+		properties.setGravitationalMultiplier(Math.min(Math.max(0.05f,(baseGravity + random.nextInt(gravityFactor) - gravityFactor/2)/100f), 1.3f));
 
 		double minDistance;
 		int walkDist = 0;
@@ -320,7 +320,7 @@ public class DimensionManager implements IGalaxy {
 			properties.ringColor[2] = properties.skyColor[2];
 		}
 		
-		properties.rotationalPeriod = (int) (Math.pow((1/properties.gravitationalMultiplier),3) * 24000);
+		properties.rotationalPeriod = (int) (Math.pow((1/properties.getGravitationalMultiplier()),3) * 24000);
 
 		properties.addBiomes(properties.getViableBiomes());
 
@@ -344,7 +344,7 @@ public class DimensionManager implements IGalaxy {
 		properties.setAtmosphereDensityDirect(MathHelper.clamp(baseAtmosphere + random.nextInt(atmosphereFactor) - atmosphereFactor/2, 0, 200)); 
 		properties.orbitalDist = MathHelper.clamp(baseDistance + random.nextInt(distanceFactor),0,200);
 		//System.out.println(properties.orbitalDist);
-		properties.gravitationalMultiplier = Math.min(Math.max(0.05f,(baseGravity + random.nextInt(gravityFactor) - gravityFactor/2)/100f), 1.3f);
+		properties.setGravitationalMultiplier(Math.min(Math.max(0.05f,(baseGravity + random.nextInt(gravityFactor) - gravityFactor/2)/100f), 1.3f));
 
 		double minDistance;
 

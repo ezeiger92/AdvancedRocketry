@@ -331,7 +331,7 @@ public class WorldProviderPlanet extends WorldProvider implements IPlanetaryProv
 
 	@Override
 	public double getGravitationalMultiplier(BlockPos pos) {
-		return getDimensionProperties(pos).gravitationalMultiplier;
+		return getDimensionProperties(pos).getGravitationalMultiplier();
 	}
 
 	@Override

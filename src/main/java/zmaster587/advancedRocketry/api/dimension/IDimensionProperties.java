@@ -82,6 +82,16 @@ public interface IDimensionProperties {
 	public float getGravitationalMultiplier();
 	
 	/**
+	 * sets a custom size to use, rather than relying on gravity
+	 */
+	public void setSize(float size);
+	
+	/**
+	 * gets the object size, typically gravity unless overwritten
+	 */
+	public float getSize();
+	
+	/**
 	 * Adds a satellite to this DIM
 	 * @param satellite satellite to add
 	 * @param world world to add the satellite to

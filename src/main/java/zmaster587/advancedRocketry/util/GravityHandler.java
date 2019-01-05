@@ -59,7 +59,7 @@ public class GravityHandler implements IGravityManager {
 					if(entity.world.provider instanceof IPlanetaryProvider)
 						gravMult = ((IPlanetaryProvider)entity.world.provider).getGravitationalMultiplier(entity.getPosition());
 					else
-						gravMult = DimensionManager.getInstance().getDimensionProperties(entity.world.provider.getDimension()).gravitationalMultiplier;
+						gravMult = DimensionManager.getInstance().getDimensionProperties(entity.world.provider.getDimension()).getGravitationalMultiplier();
 					if(entity instanceof EntityItem)
 						entity.motionY -= gravMult*ITEM_GRAV_OFFSET;
 					else//Not-Items are not ASMed, so they have to subtract the original gravity.

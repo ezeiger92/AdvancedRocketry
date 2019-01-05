@@ -56,7 +56,7 @@ public class RenderPlanetUIEntity extends Render<EntityUIPlanet> implements IRen
 		if(properties == null)
 			return;
 
-		float sizeScale = Math.max(properties.gravitationalMultiplier*properties.gravitationalMultiplier*entity.getScale(), .5f);
+		float sizeScale = Math.max(properties.getGravitationalMultiplier()*properties.getGravitationalMultiplier()*entity.getScale(), .5f);
 
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)x, (float)y + sizeScale*0.03f, (float)z);
@@ -198,7 +198,7 @@ public class RenderPlanetUIEntity extends Render<EntityUIPlanet> implements IRen
 			//Draw Mass indicator
 			Minecraft.getMinecraft().renderEngine.bindTexture(planetUIFG);
 			GlStateManager.color(1, 1, 1,0.8f);
-			renderMassIndicator(buffer, properties.gravitationalMultiplier/2f);
+			renderMassIndicator(buffer, properties.getGravitationalMultiplier()/2f);
 
 			//Draw background
 			GlStateManager.color(1, 1, 1,1);
