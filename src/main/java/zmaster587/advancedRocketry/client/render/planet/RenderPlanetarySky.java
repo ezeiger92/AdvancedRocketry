@@ -562,7 +562,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 			}
 
 			assert(parentProperties != null);
-			renderPlanet2(buffer, parentProperties, (200-planetOrbitalDistance), multiplier, rotation, false);
+			renderPlanet(buffer, parentProperties, planetOrbitalDistance, multiplier, rotation);
 			GL11.glPopMatrix();
 		}
 
@@ -582,7 +582,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 			double y = MathHelper.sin((float)moon.orbitTheta);
 			double rotation = -Math.PI/2f + Math.atan2(x, y) - (moon.orbitTheta - Math.PI)*MathHelper.sin(phiAngle);
 
-			renderPlanet(buffer, moon, moon.getParentOrbitalDistance(), multiplier, rotation, moon.hasAtmosphere(), moon.hasRings);
+			renderPlanet(buffer, moon, moon.getParentOrbitalDistance(), multiplier, rotation);
 			GL11.glPopMatrix();
 		}
 
@@ -668,19 +668,18 @@ public class RenderPlanetarySky extends IRenderHandler {
 		return EnumFacing.EAST;
 	}
 
-	protected void renderPlanet(BufferBuilder buffer, DimensionProperties properties, float planetOrbitalDistance, float alphaMultiplier, double shadowAngle, boolean hasAtmosphere, boolean hasRing) {
-		renderPlanet2(buffer, properties, 10f*(200-planetOrbitalDistance)/100f, alphaMultiplier, shadowAngle, hasRing);
-	}
-
-	protected void renderPlanet2(BufferBuilder buffer, DimensionProperties properties, float size, float alphaMultiplier, double shadowAngle, boolean hasRing) {
+	protected void renderPlanet(BufferBuilder buffer, DimensionProperties properties, float distance, float alphaMultiplier, double shadowAngle) {
 		ResourceLocation icon = getTextureForPlanet(properties);
 		boolean hasAtmosphere = properties.hasAtmosphere();
 		boolean gasGiant = properties.isGasGiant();
+		boolean hasRing = properties.hasRings();
 		boolean hasDecorators = properties.hasDecorators();
 		float skyColor[] = properties.skyColor;
 		float ringColor[] = properties.skyColor;
+		
+		float size = properties.getSize() / distance * 1000;
 
-		renderPlanetPubHelper(buffer, icon, 0, 0, -20, size*0.2f, alphaMultiplier, shadowAngle, hasAtmosphere, skyColor, ringColor, gasGiant, hasRing, hasDecorators);
+		renderPlanetPubHelper(buffer, icon, 0, 0, -20, size, alphaMultiplier, shadowAngle, hasAtmosphere, skyColor, ringColor, gasGiant, hasRing, hasDecorators);
 	}
 
 	protected void rotateAroundAxis() {
@@ -725,6 +724,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 
 			// TODO: Sky color here
 			GlStateManager.color(0f, 0f, 0f, adjustedMultiplier);
+			// TODO: Deduplicate my copy/paste mess -Erik
 			buffer.pos(-f10, zLevel - 0.005f, f10).tex((double)f16, (double)f17).endVertex();
 			buffer.pos(f10, zLevel - 0.005f, f10).tex((double)f14, (double)f17).endVertex();
 			buffer.pos(f10, zLevel - 0.005f, -f10).tex((double)f14, (double)f15).endVertex();
