@@ -192,7 +192,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 			axis.y = (float) dir.getFrontOffsetY();
 			axis.z = (float) dir.getFrontOffsetZ();
 
-			myPhi = properties.orbitalPhi;
+			myPhi = properties.getOrbitalPhi();
 			myTheta = properties.orbitTheta;
 			myRotationalPhi = properties.rotationalPhi;
 			myPrevOrbitalTheta = properties.prevOrbitalTheta;
@@ -245,7 +245,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 			axis.y = (float) dir.getFrontOffsetY();
 			axis.z = (float) dir.getFrontOffsetZ();
 
-			myPhi = properties.orbitalPhi;
+			myPhi = properties.getOrbitalPhi();
 			myTheta = properties.orbitTheta;
 			myRotationalPhi = properties.rotationalPhi;
 			myPrevOrbitalTheta = properties.prevOrbitalTheta;
@@ -341,7 +341,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 			GL11.glPushMatrix();
 			GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
 			GL11.glRotatef(MathHelper.sin(mc.world.getCelestialAngleRadians(partialTicks)) < 0.0F ? 180.0F : 0.0F, 0.0F, 0.0F, 1.0F);
-			GL11.glRotated(90.0F - myRotationalPhi, 0.0F, 0.0F, 1.0F);
+			GL11.glRotated(90.0F - Math.toDegrees(myRotationalPhi), 0.0F, 0.0F, 1.0F);
 
 			//Sim atmospheric thickness
 			float sunriseColorR = sunriseColor[0];
@@ -392,7 +392,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 
 		float multiplier = (2-atmosphere)/2f * skyVisibility;//atmosphere > 1 ? (2-atmosphere) : 1f;
 
-		GL11.glRotatef((float)myRotationalPhi, 0f, 1f, 0f);
+		GL11.glRotatef((float)Math.toDegrees(myRotationalPhi), 0f, 1f, 0f);
 
 		//Draw Rings
 		if(hasRings) {
@@ -509,10 +509,11 @@ public class RenderPlanetarySky extends IRenderHandler {
 		if(isMoon) {
 			GL11.glPushMatrix();
 
-			GL11.glRotatef((float)myPhi, 0f, 0f, 1f);
-			GL11.glRotatef((float)((partialTicks*myTheta + ((1-partialTicks)*myPrevOrbitalTheta)) * 180F/Math.PI), 1f, 0f, 0f);
+			GL11.glRotatef((float)Math.toDegrees(myPhi), 0f, 0f, 1f);
+			
+			GL11.glRotatef((float)Math.toDegrees(partialTicks * myTheta + (1 - partialTicks) * myPrevOrbitalTheta), 1f, 0f, 0f);
 
-			float phiAngle = (float)((myPhi) * Math.PI/180f);
+			float phiAngle = (float)myPhi;
 
 			//Close enough approximation, I missed something but seems to off by no more than 30*
 			//Nobody will look
@@ -569,15 +570,15 @@ public class RenderPlanetarySky extends IRenderHandler {
 		for(DimensionProperties moon : children) {
 			GL11.glPushMatrix();
 
-			moon.orbitalPhi = 10;
-			double rot = ((partialTicks*moon.orbitTheta + ((1-partialTicks)*moon.prevOrbitalTheta)) * 180F/Math.PI);
+			double rot = (partialTicks*moon.orbitTheta + (1 - partialTicks) * moon.prevOrbitalTheta);
 
-			GL11.glRotatef((float)moon.orbitalPhi, 0f, 0f, 1f);
+			GL11.glRotatef((float)Math.toDegrees(moon.getOrbitalPhi()), 0f, 0f, 1f);
 			GL11.glRotated(rot, 1f, 0f, 0f);
 
 			//Close enough approximation, I missed something but seems to off by no more than 30*
 			//Nobody will look
-			float phiAngle = (float)((moon.orbitalPhi) * Math.PI/180f);
+			// I looked, and you missed mixing radians and degrees. <3 -Erik
+			float phiAngle = (float)moon.getOrbitalPhi();
 			double x = -MathHelper.sin(phiAngle)*MathHelper.cos((float)moon.orbitTheta);
 			double y = MathHelper.sin((float)moon.orbitTheta);
 			double rotation = -Math.PI/2f + Math.atan2(x, y) - (moon.orbitTheta - Math.PI)*MathHelper.sin(phiAngle);

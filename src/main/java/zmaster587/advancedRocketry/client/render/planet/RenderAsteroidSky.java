@@ -258,7 +258,7 @@ public class RenderAsteroidSky extends IRenderHandler {
 			axis.y = (float) dir.getFrontOffsetY();
 			axis.z = (float) dir.getFrontOffsetZ();
 
-			myPhi = properties.orbitalPhi;
+			myPhi = properties.getOrbitalPhi();
 			myTheta = properties.orbitTheta;
 			myRotationalPhi = properties.rotationalPhi;
 			myPrevOrbitalTheta = properties.prevOrbitalTheta;
@@ -306,7 +306,7 @@ public class RenderAsteroidSky extends IRenderHandler {
 			axis.y = (float) dir.getFrontOffsetY();
 			axis.z = (float) dir.getFrontOffsetZ();
 
-			myPhi = properties.orbitalPhi;
+			myPhi = properties.getOrbitalPhi();
 			myTheta = properties.orbitTheta;
 			myRotationalPhi = properties.rotationalPhi;
 			myPrevOrbitalTheta = properties.prevOrbitalTheta;
@@ -459,7 +459,7 @@ public class RenderAsteroidSky extends IRenderHandler {
 		if(mc.world.isRainingAt(mc.player.getPosition().add(0, 199, 0)))
 			multiplier *= 1-mc.world.getRainStrength(partialTicks);
 
-		GL11.glRotatef((float)myRotationalPhi, 0f, 1f, 0f);
+		GL11.glRotatef((float)Math.toDegrees(myRotationalPhi), 0f, 1f, 0f);
 
 		//Draw Rings
 		if(hasRings) {
@@ -582,10 +582,10 @@ public class RenderAsteroidSky extends IRenderHandler {
 		if(isMoon) {
 			GL11.glPushMatrix();
 
-			GL11.glRotatef((float)myPhi, 0f, 0f, 1f);
-			GL11.glRotatef((float)((partialTicks*myTheta + ((1-partialTicks)*myPrevOrbitalTheta)) * 180F/Math.PI), 1f, 0f, 0f);
+			GL11.glRotatef((float)Math.toDegrees(myPhi), 0f, 0f, 1f);
+			GL11.glRotatef((float)Math.toDegrees(partialTicks*myTheta + ((1-partialTicks)*myPrevOrbitalTheta)), 1f, 0f, 0f);
 
-			float phiAngle = (float)((myPhi) * Math.PI/180f);
+			float phiAngle = (float)myPhi;
 
 			//Close enough approximation, I missed something but seems to off by no more than 30*
 			//Nobody will look
@@ -642,15 +642,14 @@ public class RenderAsteroidSky extends IRenderHandler {
 		for(DimensionProperties moons : children) {
 			GL11.glPushMatrix();
 
-			moons.orbitalPhi = 10;
 			double rot = ((partialTicks*moons.orbitTheta + ((1-partialTicks)*moons.prevOrbitalTheta)) * 180F/Math.PI);
 
-			GL11.glRotatef((float)moons.orbitalPhi, 0f, 0f, 1f);
+			GL11.glRotatef((float)Math.toDegrees(moons.getOrbitalPhi()), 0f, 0f, 1f);
 			GL11.glRotated(rot, 1f, 0f, 0f);
 
 			//Close enough approximation, I missed something but seems to off by no more than 30*
 			//Nobody will look
-			float phiAngle = (float)((moons.orbitalPhi) * Math.PI/180f);
+			float phiAngle = (float)moons.getOrbitalPhi();
 			double x = -MathHelper.sin(phiAngle)*MathHelper.cos((float)moons.orbitTheta);
 			double y = MathHelper.sin((float)moons.orbitTheta);
 			double rotation = -Math.PI/2f + Math.atan2(x, y) - (moons.orbitTheta - Math.PI)*MathHelper.sin(phiAngle);

@@ -285,7 +285,7 @@ public class DimensionManager implements IGalaxy {
 
 		properties.setOrbitalDist(newDist);
 
-		properties.orbitalPhi = (random.nextGaussian() -0.5d)*180;
+		properties.setOrbitalPhi((random.nextGaussian() - 0.5d) * Math.PI * 2);
 		properties.rotationalPhi = (random.nextGaussian() -0.5d)*180;
 
 		//Get Star Color
@@ -353,7 +353,7 @@ public class DimensionManager implements IGalaxy {
 		do {
 			minDistance = Double.MAX_VALUE;
 
-			properties.orbitTheta  = random.nextInt(360)*(2f*Math.PI)/360f;
+			properties.setInitialTheta(Math.toRadians(random.nextInt(360)));
 
 			for(IDimensionProperties properties2 : getStar(starId).getPlanets()) {
 				double dist = Math.abs(((DimensionProperties)properties2).orbitTheta - properties.orbitTheta);

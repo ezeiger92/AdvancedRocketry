@@ -53,6 +53,7 @@ public class RenderJetPack extends ModelBiped {
 		GL11.glPushMatrix();
 		//GL11.glTranslatef(x, y, z);
 		if(entity.isSneaking()) {
+			// TODO: Taking .5, as a radian value, and then rotating by it. What?
 			GL11.glRotatef(0.5F * (180F / (float)Math.PI), 1.0F, 0.0F, 0.0F);
 			GL11.glTranslatef(0,.2f, 0);
 		}

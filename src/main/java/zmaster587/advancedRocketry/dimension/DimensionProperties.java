@@ -199,8 +199,9 @@ public class DimensionProperties implements Cloneable, IDimensionProperties {
 	public int rotationalPeriod;
 	//Stored in radians
 	public double orbitTheta;
+	private double initialTheta = 0;
 	public double prevOrbitalTheta;
-	public double orbitalPhi;
+	private double orbitalPhi;
 	public double rotationalPhi;
 	public OreGenProperties oreProperties = null;
 	public String customIcon;
@@ -246,7 +247,6 @@ public class DimensionProperties implements Cloneable, IDimensionProperties {
 		ringColor = new float[] {.4f, .4f, .7f};
 		oceanBlock = null;
 		fillerBlock = null;
-
 		allowedBiomes = new LinkedList<BiomeManager.BiomeEntry>();
 		terraformedBiomes = new LinkedList<BiomeManager.BiomeEntry>();
 		satallites = new HashMap<>();
@@ -338,7 +338,7 @@ public class DimensionProperties implements Cloneable, IDimensionProperties {
 
 	@Override
 	public void setGravitationalMultiplier(float mult) {
-		gravitationalMultiplier = mult;
+		gravitationalMultiplier = Math.min(Math.max(MIN_GRAVITY, mult * 100), MAX_GRAVITY) / 100;
 	}
 
 	// TODO: SIZE
@@ -895,7 +895,7 @@ public class DimensionProperties implements Cloneable, IDimensionProperties {
 
 	public void updateOrbit() {
 		this.prevOrbitalTheta = this.orbitTheta;
-		this.orbitTheta = (AdvancedRocketry.proxy.getWorldTimeUniversal(0)*(201-orbitalDist)*0.000002d) % (2*Math.PI);
+		this.orbitTheta = (AdvancedRocketry.proxy.getWorldTimeUniversal(0)*(201-orbitalDist)*0.000002d + this.initialTheta) % (2*Math.PI);
 	}
 
 	/**
@@ -1262,6 +1262,14 @@ public class DimensionProperties implements Cloneable, IDimensionProperties {
 		gravitationalMultiplier = nbt.getFloat("gravitationalMultiplier");
 		orbitalDist = nbt.getInteger("orbitalDist");
 		orbitTheta = nbt.getDouble("orbitTheta");
+
+		if(nbt.hasKey("initialTheta")) {
+			initialTheta = nbt.getDouble("initialTheta");
+		}
+		else {
+			initialTheta = 0;
+		}
+
 		orbitalPhi = nbt.getDouble("orbitPhi");
 		rotationalPhi = nbt.getDouble("rotationalPhi");
 		atmosphereDensity = nbt.getInteger("atmosphereDensity");
@@ -1431,6 +1439,7 @@ public class DimensionProperties implements Cloneable, IDimensionProperties {
 		nbt.setFloat("gravitationalMultiplier", gravitationalMultiplier);
 		nbt.setInteger("orbitalDist", orbitalDist);
 		nbt.setDouble("orbitTheta", orbitTheta);
+		nbt.setDouble("initialTheta", initialTheta);
 		nbt.setDouble("orbitPhi", orbitalPhi);
 		nbt.setDouble("rotationalPhi", rotationalPhi);
 		nbt.setInteger("atmosphereDensity", atmosphereDensity);
@@ -1560,6 +1569,26 @@ public class DimensionProperties implements Cloneable, IDimensionProperties {
 	@Override
 	public double getOrbitTheta() {
 		return orbitTheta;
+	}
+	
+	@Override
+	public double getInitialTheta() {
+		return this.initialTheta;
+	}
+	
+	@Override
+	public void setInitialTheta(double thetaRadians) {
+		this.initialTheta = thetaRadians;
+	}
+	
+	@Override
+	public double getOrbitalPhi() {
+		return this.orbitalPhi;
+	}
+	
+	@Override
+	public void setOrbitalPhi(double phiRadians) {
+		this.orbitalPhi = phiRadians;
 	}
 
 	@Override

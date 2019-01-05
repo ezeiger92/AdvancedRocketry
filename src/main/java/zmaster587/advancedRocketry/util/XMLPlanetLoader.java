@@ -255,7 +255,7 @@ public class XMLPlanetLoader {
 			else if(planetPropertyNode.getNodeName().equalsIgnoreCase("gravitationalmultiplier")) {
 
 				try {
-					properties.setGravitationalMultiplier(Math.min(Math.max(Integer.parseInt(planetPropertyNode.getTextContent()), DimensionProperties.MIN_GRAVITY), DimensionProperties.MAX_GRAVITY)/100f);
+					properties.setGravitationalMultiplier(Integer.parseInt(planetPropertyNode.getTextContent()) / 100f);
 				} catch (NumberFormatException e) {
 					AdvancedRocketry.logger.warn("Invalid gravitationalMultiplier specified"); //TODO: more detailed error msg
 				}
@@ -271,7 +271,7 @@ public class XMLPlanetLoader {
 			else if(planetPropertyNode.getNodeName().equalsIgnoreCase("orbitaltheta")) {
 
 				try {
-					properties.orbitTheta = (Integer.parseInt(planetPropertyNode.getTextContent()) % 360) * 2/Math.PI;
+					properties.setInitialTheta(Math.toRadians(Integer.parseInt(planetPropertyNode.getTextContent())));
 				} catch (NumberFormatException e) {
 					AdvancedRocketry.logger.warn("Invalid orbitalTheta specified"); //TODO: more detailed error msg
 				}
@@ -411,9 +411,9 @@ public class XMLPlanetLoader {
 			}
 			else if(planetPropertyNode.getNodeName().equalsIgnoreCase("orbitalPhi")) {
 				try {
-					properties.orbitalPhi = (Integer.parseInt(planetPropertyNode.getTextContent()) % 360) * 180/Math.PI;
+					properties.setOrbitalPhi(Math.toRadians(Integer.parseInt(planetPropertyNode.getTextContent())));
 				} catch (NumberFormatException e) {
-					AdvancedRocketry.logger.warn("Invalid orbitalTheta specified"); //TODO: more detailed error msg
+					AdvancedRocketry.logger.warn("Invalid orbitalPhi specified"); //TODO: more detailed error msg
 				}
 			}
 			else if(planetPropertyNode.getNodeName().equalsIgnoreCase("oreGen")) {
@@ -691,7 +691,8 @@ public class XMLPlanetLoader {
 		outputString = outputString + tabLen + "\t<skyColor>" + properties.skyColor[0] + "," + properties.skyColor[1] + "," + properties.skyColor[2] + "</skyColor>\n";
 		outputString = outputString + tabLen + "\t<gravitationalMultiplier>" + (int)(properties.getGravitationalMultiplier()*100f) + "</gravitationalMultiplier>\n";
 		outputString = outputString + tabLen + "\t<orbitalDistance>" + properties.getOrbitalDist() + "</orbitalDistance>\n";
-		outputString = outputString + tabLen + "\t<orbitalPhi>" + (int)(properties.orbitalPhi* Math.PI/180) + "</orbitalPhi>\n";
+		outputString = outputString + tabLen + "\t<orbitalPhi>" + (int)(Math.toDegrees(properties.getOrbitalPhi())) + "</orbitalPhi>\n";
+		outputString = outputString + tabLen + "\t<orbitalTheta>" + (int)(Math.toDegrees(properties.getOrbitalPhi())) + "</orbitalTheta>\n";
 		outputString = outputString + tabLen + "\t<rotationalPeriod>" + (int)properties.rotationalPeriod + "</rotationalPeriod>\n";
 		outputString = outputString + tabLen + "\t<atmosphereDensity>" + (int)properties.getAtmosphereDensity() + "</atmosphereDensity>\n";
 

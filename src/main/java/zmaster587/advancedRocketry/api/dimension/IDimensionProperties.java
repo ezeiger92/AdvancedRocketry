@@ -156,6 +156,28 @@ public interface IDimensionProperties {
 	public double getOrbitTheta();
 
 	/**
+	 * @return the orbit's phi in radians
+	 */
+	public double getOrbitalPhi();
+
+	/**
+	 * @return the location along the orbit in radians
+	 */
+	public void setOrbitalPhi(double phiRadians);
+	
+	/**
+	 * @return the starting planet theta in radians
+	 * measured along axis of rotation away from parent (star)
+	 */
+	public double getInitialTheta();
+	
+	/**
+	 * sets the starting planet theta in radians
+	 * measured along axis of rotation away from parent (star)
+	 */
+	public void setInitialTheta(double thetaRadians);
+
+	/**
 	 * @return distance of the planet from sun or moon in the range 0 to 200
 	 */
 	public int getOrbitalDist();

@@ -76,6 +76,7 @@ public class RendererCuttingMachine extends TileEntitySpecialRenderer {
 
 			GL11.glTranslatef(1f, 1f, 1.5f);
 
+			// TODO: negative modulos might not be desired here
 			GL11.glRotatef(-6*multiBlockTile.getProgress(0) % 360, 1, 0, 0);
 			GL11.glTranslatef(-1f, -1f, -1.5f);
 			model.renderPart("Saw");

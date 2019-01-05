@@ -73,6 +73,7 @@ public class RenderPlanetUIEntity extends Render<EntityUIPlanet> implements IRen
 		GlStateManager.color(1f, 1, 1f, .5f);
 
 		GL11.glPushMatrix();
+		// TODO: This will clip at 255 and jump back to 0, is this desired?
 		GL11.glRotatef(entity.world.getTotalWorldTime() & 0xFF, 0, 1, 0);
 		sphere.renderAll();
 		GL11.glPopMatrix();
