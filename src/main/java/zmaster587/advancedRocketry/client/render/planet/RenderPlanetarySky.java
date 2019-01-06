@@ -800,7 +800,9 @@ public class RenderPlanetarySky extends IRenderHandler {
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GlStateManager.color(1f, 1f, 1f, alphaMultiplier);
 			
-			bufferPutSquare(buffer, size, zLevel + 0.01f);
+			// Slightly expand to cover up fuzzy edges (especially in planet selector)
+			// A better idea is rendering to a texture, maybe another time
+			bufferPutSquare(buffer, size * 1.006, zLevel + 0.01f);
 			Tessellator.getInstance().draw();
 		}
 
