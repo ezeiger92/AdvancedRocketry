@@ -447,7 +447,7 @@ public class EntityElevatorCapsule extends Entity implements INetworkEntity {
 				if(srcTilePos != null && srcTilePos.pos != null)
 					srcTile = world.getTileEntity(srcTilePos.pos.getBlockPos());
 				
-				
+				// TODO: This displays to many people
 				if( srcTile != null && srcTile instanceof TileSpaceElevator && !((TileSpaceElevator)srcTile).getMachineEnabled())
 					AdvancedRocketry.proxy.displayMessage(LibVulpes.proxy.getLocalizedString("msg.spaceElevator.turnedOff"),5);
 				else if(dstTilePos != null) 

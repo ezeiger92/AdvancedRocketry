@@ -570,7 +570,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 		for(DimensionProperties moon : children) {
 			GL11.glPushMatrix();
 
-			double rot = (partialTicks*moon.getOrbitTheta() + (1 - partialTicks) * moon.getPreviousOrbitTheta());
+			double rot = Math.toDegrees(partialTicks*moon.getOrbitTheta() + (1 - partialTicks) * moon.getPreviousOrbitTheta());
 
 			GL11.glRotatef((float)Math.toDegrees(moon.getOrbitalPhi()), 0f, 0f, 1f);
 			GL11.glRotated(rot, 1f, 0f, 0f);
@@ -740,7 +740,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 		if (hasDecorators) {
 			//ATM Glow
 			GL11.glPushMatrix();
-			GL11.glRotated(90-shadowAngle* 180/Math.PI, 0, 1, 0);
+			GL11.glRotated(90 + Math.toDegrees(shadowAngle), 0, 1, 0);
 
 			//Rings
 			if(hasRing) {
@@ -792,7 +792,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 			}
 
 
-			GL11.glRotated(90-shadowAngle* 180/Math.PI, 0, 1, 0);
+			GL11.glRotated(90 + Math.toDegrees(shadowAngle), 0, 1, 0);
 
 			//Draw Shadow
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
