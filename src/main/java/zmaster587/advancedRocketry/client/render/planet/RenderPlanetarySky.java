@@ -821,15 +821,15 @@ public class RenderPlanetarySky extends IRenderHandler {
 		final double zLevel = 100.0;
 		
 		if(sun != null && sun.isBlackHole()) {
-			//GlStateManager.depthMask(true);
 			//GlStateManager.enableAlpha();
 			//GlStateManager.alphaFunc(GL11.GL_GREATER, 0.01f);
+			GlStateManager.depthMask(true);
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			mc.renderEngine.bindTexture(TextureResources.locationBlackHole);	
 
 			GL11.glPushMatrix();
-			GL11.glTranslatef(0, 100, 0);
+			GL11.glScalef(0.5f, 1f, 0.5f);
 			float phase = -(System.currentTimeMillis() % 3600)/3600f;
 			//float scale = 1+(float)Math.sin(phase*3.14)*0.1f;
 			phase*=360f;
@@ -849,17 +849,19 @@ public class RenderPlanetarySky extends IRenderHandler {
 			
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 			
-			// TODO: This changes position slightly based on time of day; inspect
 			//Render accretion disk
 			mc.renderEngine.bindTexture(TextureResources.locationAccretionDisk);
+			
+			GL11.glPushMatrix();
+			
+			GL11.glTranslatef(0, (float)zLevel, 0);
+			GL11.glRotatef(80, -1, 1, 0);
+			
 			GlStateManager.depthMask(false);
 			for(int i = 0; i < 2; i++)
 			{
 				float speedMult = (2 - i)*1.01f + 1;
 				GL11.glPushMatrix();
-				
-				GL11.glTranslatef(0, (float)zLevel, 0);
-				GL11.glRotatef(80, -1, 1, 0);
 				GL11.glRotatef((System.currentTimeMillis() % (int)(speedMult*36000))/(100f*speedMult), 0, 1, 0);
 
 				GlStateManager.color((float)1, (float).5 , (float).4 ,1f);
@@ -871,9 +873,6 @@ public class RenderPlanetarySky extends IRenderHandler {
 				GL11.glPopMatrix();
 
 				GL11.glPushMatrix();
-
-				GL11.glTranslatef(0, (float)zLevel - 0.01f, 0);
-				GL11.glRotatef(80, -1, 1, 0);
 				GL11.glRotatef((System.currentTimeMillis() % (int)(speedMult*360*50))/(50f*speedMult), 0, 1, 0);
 
 				GlStateManager.color((float)0.8, (float).7 , (float).4 ,1f);
@@ -885,9 +884,6 @@ public class RenderPlanetarySky extends IRenderHandler {
 				GL11.glPopMatrix();
 
 				GL11.glPushMatrix();
-
-				GL11.glTranslatef(0, (float)zLevel - 0.02f, 0);
-				GL11.glRotatef(80, -1, 1, 0);
 				GL11.glRotatef((System.currentTimeMillis() % (int)(speedMult*360*25))/(25f*speedMult), 0, 1, 0);
 
 				GlStateManager.color((float)0.2, (float).4 , (float)1 ,1f);
@@ -898,6 +894,8 @@ public class RenderPlanetarySky extends IRenderHandler {
 				Tessellator.getInstance().draw();
 				GL11.glPopMatrix();
 			}
+			
+			GL11.glPopMatrix();
 
 		}
 		else {

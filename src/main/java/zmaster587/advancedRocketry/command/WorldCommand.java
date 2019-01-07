@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import zmaster587.advancedRocketry.AdvancedRocketry;
@@ -34,6 +35,7 @@ import zmaster587.advancedRocketry.item.ItemStationChip;
 import zmaster587.advancedRocketry.network.PacketDimInfo;
 import zmaster587.advancedRocketry.network.PacketStellarInfo;
 import zmaster587.advancedRocketry.stations.SpaceObjectManager;
+import zmaster587.advancedRocketry.world.provider.WorldProviderPlanet;
 import zmaster587.advancedRocketry.world.util.TeleporterNoPortal;
 import zmaster587.advancedRocketry.world.util.TeleporterNoPortalSeekBlock;
 import zmaster587.libVulpes.network.PacketHandler;
@@ -92,6 +94,20 @@ public class WorldCommand implements ICommand {
 			sender.sendMessage(new TextComponentString("setGravity"));
 			sender.sendMessage(new TextComponentString("addTorch"));
 			sender.sendMessage(new TextComponentString("[Enter /advRocketry <subcommand> help for more info]"));
+		}
+		else if(string.length >= 1 && string[0].equalsIgnoreCase("getev")) {
+			WorldProvider prov = sender.getEntityWorld().provider;
+			
+			if(prov instanceof WorldProviderPlanet) {
+				WorldProviderPlanet planet = (WorldProviderPlanet) prov;
+				
+				DimensionProperties properties = DimensionManager.getEffectiveDimId(sender.getEntityWorld(), sender.getEntityWorld().getSpawnPoint());
+				
+				sender.sendMessage(new TextComponentString("Eclipse value: " + planet.eclipseValue(properties, 1f, 1)));
+			}
+			else {
+				sender.sendMessage(new TextComponentString("Not a planet?"));
+			}
 		}
 		else if(string.length >= 1 && string[0].equalsIgnoreCase("dumpBiomes")) {
 
