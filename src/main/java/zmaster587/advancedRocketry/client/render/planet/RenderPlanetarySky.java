@@ -394,50 +394,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 
 		GL11.glRotatef((float)Math.toDegrees(myRotationalPhi), 0f, 1f, 0f);
 
-		//Draw Rings
-		if(hasRings) {
-			GL11.glPushMatrix();
-			GL11.glRotatef(90f, 0f, 1f, 0f);
-
-			float f10 = 100;
-			double ringDist = 0;
-			mc.renderEngine.bindTexture(DimensionProperties.planetRings);
-
-			GL11.glRotated(70, 1, 0, 0);
-			GL11.glTranslated(0, -10, 0);
-
-			GlStateManager.color(ringColor[0], ringColor[1], ringColor[2],multiplier);
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);	
-			buffer.pos((double)f10, ringDist, (double)(-f10)).tex(1.0D, 0.0D).endVertex();
-			buffer.pos((double)(-f10), ringDist, (double)(-f10)).tex(0.0D, 0.0D).endVertex();
-			buffer.pos((double)(-f10), ringDist, (double)f10).tex(0.0D, 1.0D).endVertex();
-			buffer.pos((double)f10, ringDist, (double)f10).tex(1.0D, 1.0D).endVertex();
-			Tessellator.getInstance().draw();
-			GL11.glPopMatrix();
-
-			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-			GL11.glPushMatrix();
-
-			GL11.glRotatef(90f, 0f, 1f, 0f);
-			GL11.glRotated(70, 1, 0, 0);
-			GL11.glRotatef(isWarp ? 0 : celestialAngle * 360.0F, 0, 1, 0);
-			GL11.glTranslated(0, -10, 0);
-
-
-
-			mc.renderEngine.bindTexture(DimensionProperties.planetRingShadow);
-			GlStateManager.color(0f, 0f, 0f,multiplier);
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);	
-			buffer.pos((double)f10, ringDist, (double)(-f10)).tex(1.0D, 0.0D).endVertex();
-			buffer.pos((double)(-f10), ringDist, (double)(-f10)).tex(0.0D, 0.0D).endVertex();
-			buffer.pos((double)(-f10), ringDist, (double)f10).tex(0.0D, 1.0D).endVertex();
-			buffer.pos((double)f10, ringDist, (double)f10).tex(1.0D, 1.0D).endVertex();
-			Tessellator.getInstance().draw();
-			GL11.glPopMatrix();
-
-			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
-		}
-
+		GL11.glPushMatrix();
 		if(!isWarp)
 			rotateAroundAxis();
 
@@ -585,6 +542,52 @@ public class RenderPlanetarySky extends IRenderHandler {
 
 			renderPlanet(buffer, moon, moon.getParentOrbitalDistance(), multiplier, rotation);
 			GL11.glPopMatrix();
+		}
+		
+		GL11.glPopMatrix();
+		
+		//Draw Rings
+		if(hasRings) {
+			GL11.glPushMatrix();
+			GL11.glRotatef(90f, 0f, 1f, 0f);
+
+			float f10 = 100;
+			double ringDist = 0;
+			mc.renderEngine.bindTexture(DimensionProperties.planetRings);
+
+			GL11.glRotated(70, 1, 0, 0);
+			GL11.glTranslated(0, -10, 0);
+
+			GlStateManager.color(ringColor[0], ringColor[1], ringColor[2],multiplier);
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);	
+			buffer.pos((double)f10, ringDist, (double)(-f10)).tex(1.0D, 0.0D).endVertex();
+			buffer.pos((double)(-f10), ringDist, (double)(-f10)).tex(0.0D, 0.0D).endVertex();
+			buffer.pos((double)(-f10), ringDist, (double)f10).tex(0.0D, 1.0D).endVertex();
+			buffer.pos((double)f10, ringDist, (double)f10).tex(1.0D, 1.0D).endVertex();
+			Tessellator.getInstance().draw();
+			GL11.glPopMatrix();
+
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+			GL11.glPushMatrix();
+
+			GL11.glRotatef(90f, 0f, 1f, 0f);
+			GL11.glRotated(70, 1, 0, 0);
+			GL11.glRotatef(isWarp ? 0 : celestialAngle * 360.0F, 0, 1, 0);
+			GL11.glTranslated(0, -10, 0);
+
+
+
+			mc.renderEngine.bindTexture(DimensionProperties.planetRingShadow);
+			GlStateManager.color(0f, 0f, 0f,multiplier);
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);	
+			buffer.pos((double)f10, ringDist, (double)(-f10)).tex(1.0D, 0.0D).endVertex();
+			buffer.pos((double)(-f10), ringDist, (double)(-f10)).tex(0.0D, 0.0D).endVertex();
+			buffer.pos((double)(-f10), ringDist, (double)f10).tex(0.0D, 1.0D).endVertex();
+			buffer.pos((double)f10, ringDist, (double)f10).tex(1.0D, 1.0D).endVertex();
+			Tessellator.getInstance().draw();
+			GL11.glPopMatrix();
+
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 		}
 
 		GlStateManager.enableFog();
@@ -824,6 +827,8 @@ public class RenderPlanetarySky extends IRenderHandler {
 			//GlStateManager.enableAlpha();
 			//GlStateManager.alphaFunc(GL11.GL_GREATER, 0.01f);
 			GlStateManager.depthMask(true);
+			GlStateManager.enableAlpha();
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.6f);
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			mc.renderEngine.bindTexture(TextureResources.locationBlackHole);	
@@ -847,6 +852,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 			Tessellator.getInstance().draw();
 			GL11.glPopMatrix();
 			
+			GlStateManager.disableAlpha();
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 			
 			//Render accretion disk
@@ -866,7 +872,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 
 				GlStateManager.color((float)1, (float).5 , (float).4 ,1f);
 				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);	
-				f10 = 3.9 * radius + i / 1.4;
+				f10 = 4.1 * radius + i / 1.4;
 				
 				bufferPutSquare(buffer, f10, 0);
 				Tessellator.getInstance().draw();
@@ -877,7 +883,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 
 				GlStateManager.color((float)0.8, (float).7 , (float).4 ,1f);
 				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);	
-				f10 = 2.8 * radius + i / 2.2;
+				f10 = 3.2 * radius + i / 2.2;
 				//multiplier = 2;
 				bufferPutSquare(buffer, f10, 0);
 				Tessellator.getInstance().draw();
@@ -888,7 +894,7 @@ public class RenderPlanetarySky extends IRenderHandler {
 
 				GlStateManager.color((float)0.2, (float).4 , (float)1 ,1f);
 				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);	
-				f10 = 2 * radius + i / 3;
+				f10 = 2.7 * radius + i / 3;
 				//multiplier = 2;
 				bufferPutSquare(buffer, f10, 0);
 				Tessellator.getInstance().draw();

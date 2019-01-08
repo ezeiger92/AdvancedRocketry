@@ -227,24 +227,103 @@ public class WorldProviderPlanet extends WorldProvider implements IPlanetaryProv
 		return f2*super.getSunBrightness(partialTicks);
 	}
 
-	public float eclipseValue(DimensionProperties properties, float lightValue, double partialTicks) {
+	private static final long SUNSET_START = 10 * 60 * 20;
+	private static final long NIGHT_START =  SUNSET_START + 18000; // 1.5 * 60s * 20t
+	private static final long SUNRISE_START = NIGHT_START + 7 * 60 * 20;
+	
+	private float sunAngleFromTime(long time) {
 		
-		double currentTheta = (((partialTicks*properties.getOrbitTheta() + ((1-partialTicks)*properties.getPreviousOrbitTheta())) * 180/Math.PI)  % 360d);
-		int solarDistance = properties.getSolarOrbitalDistance();
-		float planetaryDistance = properties.getParentOrbitalDistance();
+		float adjustedTime = time * 24000f / this.getRotationalPeriod(BlockPos.ORIGIN);
+		
+		if(adjustedTime < SUNSET_START) {
+			// 11.5 -> 168.5
+			return (SUNSET_START - adjustedTime) / SUNSET_START * (168.5f - 11.5f) + 11.5f;
+		}
+		else if(adjustedTime < NIGHT_START) {
+			// 168.5 -> 197.5
+			return (NIGHT_START - adjustedTime) / (NIGHT_START - SUNSET_START) * (197.5f - 168.5f) + 168.5f;
+		}
+		else if(adjustedTime < SUNRISE_START) {
+			// 197.5 -> 342.5
+			return (SUNRISE_START - adjustedTime) / (SUNRISE_START - NIGHT_START) * (342.5f - 197.5f) + 197.5f;
+		}
+		else {
+			// 342.5 -> 11.5
+			return ((24000 - adjustedTime) / (24000 - SUNRISE_START) * (371.5f - 342.5f) + 342.5f) % 360;
+		}
+	}
+	
+	public float eclipseValue2(DimensionProperties occluder, DimensionProperties occluded, double partialTicks) {
+		float toStar = occluder.getSolarOrbitalDistance();
+		float occluderDist;
+		// Planet occluding moon
+		if(occluded.getParentProperties() == occluder) {
+			occluderDist = occluded.getOrbitalDist();
+		}
+		// Moon occluding planet
+		else if(occluder.getParentProperties() == occluded) {
+			occluderDist = occluder.getOrbitalDist();
+		}
+		else {
+			// TODO: Some other unsupported combo, like moon vs moon or planet vs planet or something
+			return 1.0f;
+		}
+		
+		double arcDist = occluder.getOrbitTheta() - Math.toRadians(sunAngleFromTime(this.getWorldTime()));
+		
+		float apparentStarRadius = occluder.getStar().getSize() / toStar;
+		float apparentOccluderRadius = occluder.getSize() / occluderDist;
+		
+		// Too far
+		if(arcDist > apparentStarRadius + apparentOccluderRadius) {
+			return 1.0f;
+		}
+
+		// Only annular eclipse possible
+		if(apparentStarRadius > apparentOccluderRadius) {
+			// Annular eclipse
+			float annular = (float)(Math.PI * (1 - Math.pow(apparentOccluderRadius / apparentStarRadius, 2)));
+			
+			if(apparentStarRadius > apparentOccluderRadius + arcDist) {
+				return annular;
+			}
+			// Partial annular
+			else {
+				
+			}
+		}
+		else {
+			// Total eclipse
+			if(apparentOccluderRadius > apparentStarRadius + arcDist) {
+				return 0.f;
+			}
+			// Partial eclipse
+			else {
+				
+			}
+		}
+		
+		return 1.0f;
+	}
+
+	public float eclipseValue(DimensionProperties occluder, float lightValue, double partialTicks) {
+		
+		double occluderTheta = Math.toDegrees(partialTicks*occluder.getOrbitTheta() + (1-partialTicks)*occluder.getPreviousOrbitTheta())  % 360d;
+		int solarDistance = occluder.getSolarOrbitalDistance();
+		float planetaryDistance = occluder.getParentOrbitalDistance();
 
 		float difference = solarDistance/(200-planetaryDistance + 0.00001f);
 		
 		
-		float phiMuliplier = (float) (Math.max(Math.abs(MathHelper.cos((float)properties.getOrbitalPhi()))-0.95f, 0)*20);
+		float phiMuliplier = (float) (Math.max(Math.abs(MathHelper.cos((float)occluder.getOrbitalPhi()))-0.95f, 0)*20);
 
 		int offset = (int)((200-planetaryDistance)/2f);
 
 		//1 is fast attenuation
 		//-1 is no atten
 		//solar distance conrols fade, planetary distance controls duration
-		if(phiMuliplier !=0 && currentTheta > 180 - offset && currentTheta < 180 + offset ) {
-			lightValue *= phiMuliplier*(MathHelper.clamp((float) ((difference/20f) + (Math.abs(currentTheta - 180)*difference)/(10f)) ,0,1)) + (1-phiMuliplier);
+		if(phiMuliplier !=0 && occluderTheta > 180 - offset && occluderTheta < 180 + offset ) {
+			lightValue *= phiMuliplier*(MathHelper.clamp((float) ((difference/20f) + (Math.abs(occluderTheta - 180)*difference)/(10f)) ,0,1)) + (1-phiMuliplier);
 			//f2 = 0;
 		}
 		return lightValue;

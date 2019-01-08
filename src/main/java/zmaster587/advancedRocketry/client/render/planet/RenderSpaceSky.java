@@ -59,9 +59,9 @@ public class RenderSpaceSky extends RenderPlanetarySky {
 			final double zLevel = 100.0;
 			
 			GlStateManager.depthMask(true);
-			GlStateManager.enableBlend();
 			GlStateManager.enableAlpha();
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.6f);
+			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			mc.renderEngine.bindTexture(TextureResources.locationBlackHole);	
 
@@ -80,13 +80,13 @@ public class RenderSpaceSky extends RenderPlanetarySky {
 			bufferPutSquare(buffer, f10, zLevel);
 			Tessellator.getInstance().draw();
 			GL11.glPopMatrix();
-			
+
+			GlStateManager.disableAlpha();
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 			
 			//Render accretion disk
 			mc.renderEngine.bindTexture(TextureResources.locationAccretionDisk);
 			
-			GlStateManager.disableAlpha();
 			GL11.glPushMatrix();
 
 			GL11.glRotatef(180, 0, 0, 1);
