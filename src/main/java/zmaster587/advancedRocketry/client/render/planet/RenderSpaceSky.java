@@ -75,7 +75,7 @@ public class RenderSpaceSky extends RenderPlanetarySky {
 			//Set sun color and distance
 			GlStateManager.color(.2f, .5f, .4f, 1f);
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);	
-			double f10 = 0.8 * radius;
+			double f10 = 0.6 * radius;
 			
 			bufferPutSquare(buffer, f10, zLevel);
 			Tessellator.getInstance().draw();
@@ -91,18 +91,18 @@ public class RenderSpaceSky extends RenderPlanetarySky {
 
 			GL11.glRotatef(180, 0, 0, 1);
 			GL11.glTranslatef(0, (float)zLevel, 0);
-			GL11.glRotatef(60, 1, 0, 0);
+			GL11.glRotatef(81, 0, 0, 1);
 			
 			GlStateManager.depthMask(false);
 			for(int i = 0; i < 2; i++)
 			{
-				float speedMult = (2 - i)*1.01f + 1;
+				float speedMult = (2 - i)*1.5f + 1;
 				GL11.glPushMatrix();
 				GL11.glRotatef((System.currentTimeMillis() % (int)(speedMult*36000))/(100f*speedMult), 0, 1, 0);
 
 				GlStateManager.color((float)1, (float).5 , (float).4 ,1f);
 				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);	
-				f10 = 4.1 * radius + i / 1.4;
+				f10 = 3.4 * radius + i / 2.8;
 				
 				bufferPutSquare(buffer, f10, 0);
 				Tessellator.getInstance().draw();
@@ -113,7 +113,7 @@ public class RenderSpaceSky extends RenderPlanetarySky {
 
 				GlStateManager.color((float)0.8, (float).7 , (float).4 ,1f);
 				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);	
-				f10 = 3.2 * radius + i / 2.2;
+				f10 = 3.0 * radius + i / 4.4;
 				//multiplier = 2;
 				bufferPutSquare(buffer, f10, 0);
 				Tessellator.getInstance().draw();
@@ -124,7 +124,7 @@ public class RenderSpaceSky extends RenderPlanetarySky {
 
 				GlStateManager.color((float)0.2, (float).4 , (float)1 ,1f);
 				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);	
-				f10 = 2.7 * radius + i / 3;
+				f10 = 2.7 * radius + i / 6;
 				//multiplier = 2;
 				bufferPutSquare(buffer, f10, 0);
 				Tessellator.getInstance().draw();
