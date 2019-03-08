@@ -32,14 +32,14 @@ public class RenderSpaceSky extends RenderPlanetarySky {
 
 	Minecraft mc = Minecraft.getMinecraft();
 
-	protected void drawStar(BufferBuilder buffer, StellarBody sun, DimensionProperties properties, int solarOrbitalDistance, float sunSize, Vec3d sunColor, float multiplier) {
+	protected void drawStar(BufferBuilder buffer, StellarBody sun, DimensionProperties properties, int solarOrbitalDistance, Vec3d sunColor, float multiplier) {
 		DimensionProperties parentProperties = properties.getParentProperties();
 		if(parentProperties != null && sun != parentProperties.getStarData())
-			super.drawStar(buffer, sun, properties, solarOrbitalDistance, sunSize, sunColor, multiplier);
+			super.drawStar(buffer, sun, properties, solarOrbitalDistance, sunColor, multiplier);
 	}
 	
 	@Override
-	public void renderPlanet2(BufferBuilder buffer, DimensionProperties properties, float size, float alphaMultiplier, double shadowAngle, boolean hasRing) {
+	public void renderPlanet(BufferBuilder buffer, DimensionProperties properties, float size, float alphaMultiplier, double shadowAngle) {
 		//ResourceLocation icon, int locationX, int locationY, double zLevel, float planetOrbitalDistance, float alphaMultiplier, double angle, boolean hasAtmosphere, float[] atmColor, float[] ringColor, boolean isGasgiant, boolean hasRings, boolean hasDecorators) {
 
 		ISpaceObject object = SpaceObjectManager.getSpaceManager().getSpaceStationFromBlockCoords(mc.player.getPosition());
@@ -160,6 +160,7 @@ public class RenderSpaceSky extends RenderPlanetarySky {
 		//int l = k % 4;
 		//int i1 = k / 4 % 2;
 
+		// TODO: scaling
 		//Set planet Orbiting distance; size
 		float f10 = 100f*(200-planetOrbitalDistance)/100f;
 

@@ -188,10 +188,30 @@ public class ModulePlanetSelector extends ModuleContainerPan implements IButtonI
 		moduleList.addAll(planetList);
 	}
 
+	private static final float PLANET_GUI_SCALE = 35.0f;
+	private static final float STAR_GUI_SCALE = 150.0f;
+	
+	//Normalizes planet size
+	//1 -> original planet sizes
+	//0 -> every planet the same size (earth)
+	private static final float SOLAR_SIZE_VARIETY = 0.3f;
+	
+	private static int getDisplaySize(DimensionProperties planet, float planetSizeMultiplier) {
+		double scaled = planetSizeMultiplier * Math.pow(planet.getDiameter(), SOLAR_SIZE_VARIETY) * PLANET_GUI_SCALE;
+		
+		return Math.max((int)(scaled), 7);
+	}
+	
+	private static int getDisplaySize(StellarBody star, float planetSizeMultiplier) {
+		double scaled = planetSizeMultiplier * Math.pow(star.getSize(), SOLAR_SIZE_VARIETY) * STAR_GUI_SCALE;
+		
+		return Math.max((int)(scaled), 7);
+	}
+
 	@SideOnly(Side.CLIENT)
 	private void renderStarSystem(StellarBody star, int posX, int posY, float distanceZoomMultiplier, float planetSizeMultiplier) {
 
-		int displaySize = (int)(planetSizeMultiplier*star.getDisplayRadius());
+		int displaySize = getDisplaySize(star, planetSizeMultiplier);
 
 		int offsetX = posX - displaySize/2; 
 		int offsetY = posY - displaySize/2; 
@@ -202,7 +222,7 @@ public class ModulePlanetSelector extends ModuleContainerPan implements IButtonI
 			float phaseInc = 360/star.getSubStars().size();
 			float phase = 0;
 			for(StellarBody star2 : star.getSubStars()) {
-				displaySize = (int)(planetSizeMultiplier*star2.getDisplayRadius());
+				// displaySize = (int)(planetSizeMultiplier*star2.getDisplayRadius());
 
 				int deltaX, deltaY;
 				deltaX = (int)(star2.getStarSeperation()*MathHelper.cos(phase)*0.5);
@@ -214,9 +234,9 @@ public class ModulePlanetSelector extends ModuleContainerPan implements IButtonI
 				phase += phaseInc;
 			}
 		}
-		displaySize = (int)(planetSizeMultiplier*star.getDisplayRadius());
-		offsetX = posX - displaySize/2; 
-		offsetY = posY - displaySize/2; 
+		// displaySize = (int)(planetSizeMultiplier*star.getDisplayRadius());
+		//offsetX = posX - displaySize/2; 
+		//offsetY = posY - displaySize/2; 
 
 		planetList.add(button = new ModuleButton(offsetX, offsetY, star.getId() + Constants.STAR_ID_OFFSET, "", this, new ResourceLocation[] { star.isBlackHole() ? TextureResources.locationBlackHole_icon : TextureResources.locationSunNew }, String.format("Name: %s\nNumber of Planets: %d",star.getName(), star.getNumPlanets()), displaySize, displaySize));
 		button.setSound("buttonBlipA");
@@ -225,9 +245,9 @@ public class ModulePlanetSelector extends ModuleContainerPan implements IButtonI
 
 
 		//prevMultiplier *= 0.25f;
-		displaySize = (int)(planetSizeMultiplier*100);
-		offsetX = posX - displaySize/2; 
-		offsetY = posY - displaySize/2;
+		//displaySize = (int)(planetSizeMultiplier*100);
+		//offsetX = posX - displaySize/2; 
+		//offsetY = posY - displaySize/2;
 
 		for(IDimensionProperties properties : star.getPlanets()) {
 
@@ -244,7 +264,7 @@ public class ModulePlanetSelector extends ModuleContainerPan implements IButtonI
 	@SideOnly(Side.CLIENT)
 	private void renderPlanetarySystem(DimensionProperties planet, int posX, int posY, float distanceZoomMultiplier, float planetSizeMultiplier) {
 
-		int displaySize = Math.max((int)(planetSizeMultiplier*planet.gravitationalMultiplier/.02f), 7);
+		int displaySize = getDisplaySize(planet, planetSizeMultiplier);
 
 		int offsetX = (int)(distanceZoomMultiplier*posX) - displaySize/2; 
 		int offsetY = (int)(distanceZoomMultiplier*posY) - displaySize/2; 
@@ -273,7 +293,7 @@ public class ModulePlanetSelector extends ModuleContainerPan implements IButtonI
 	@SideOnly(Side.CLIENT)
 	private void renderPlanets(DimensionProperties planet, int parentOffsetX, int parentOffsetY, int parentRadius, float distanceMultiplier, float planetSizeMultiplier) {
 
-		int displaySize = Math.max((int)(planetSizeMultiplier*planet.gravitationalMultiplier/.02f),7);
+		int displaySize = getDisplaySize(planet, planetSizeMultiplier);
 
 		int offsetX = parentOffsetX + (int)(Math.cos(planet.orbitTheta)*((planet.orbitalDist*distanceMultiplier) + parentRadius)) - displaySize/2;
 		int offsetY = parentOffsetY + (int)(Math.sin(planet.orbitTheta)*((planet.orbitalDist*distanceMultiplier) + parentRadius)) - displaySize/2;
@@ -332,7 +352,7 @@ public class ModulePlanetSelector extends ModuleContainerPan implements IButtonI
 		if(!stellarView) {
 			if(currentSystem < Constants.STAR_ID_OFFSET) {
 				DimensionProperties properties = DimensionManager.getInstance().getDimensionProperties(currentSystem);
-				renderPlanetarySystem(properties, size/2, size/2, 1f,3f*properties.getPathLengthToStar());
+				renderPlanetarySystem(properties, size/2, size/2, 1f, 2 / (float)Math.pow(properties.getDiameter(), SOLAR_SIZE_VARIETY / 4));
 			}
 			else
 				renderStarSystem(DimensionManager.getInstance().getStar(currentSystem - Constants.STAR_ID_OFFSET), size/2, size/2, 1f*(float) zoom, (float)zoom*.5f);

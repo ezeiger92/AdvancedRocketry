@@ -177,13 +177,14 @@ public class DimensionProperties implements Cloneable, IDimensionProperties {
 	public static final int MAX_ATM_PRESSURE = 200;
 	public static final int MIN_ATM_PRESSURE = 0;
 
-	public static final int MAX_DISTANCE = 200;
+	public static final int MAX_DISTANCE = 1000;
 	public static final int MIN_DISTANCE = 0;
 
 	public static final int MAX_GRAVITY = 200;
 	public static final int MIN_GRAVITY = 0;
-
-
+	
+	//Set to mimic old revolution time for sun-sized stars at earth-like distances
+	private static final double ORBITAL_VELOCITY_SCALE = 0.00202;
 
 	//True if dimension is managed and created by AR (false otherwise)
 	public boolean isNativeDimension;
@@ -192,6 +193,7 @@ public class DimensionProperties implements Cloneable, IDimensionProperties {
 	public float[] fogColor;
 	public float[] ringColor;
 	public float gravitationalMultiplier;
+	private float diameter = -1.0f;
 	public int orbitalDist;
 	private int originalAtmosphereDensity;
 	private int atmosphereDensity;
@@ -339,6 +341,25 @@ public class DimensionProperties implements Cloneable, IDimensionProperties {
 	@Override
 	public void setGravitationalMultiplier(float mult) {
 		gravitationalMultiplier = mult;
+	}
+	
+	@Override
+	public float getDiameter() {
+		if(diameter > 0) {
+			return diameter;
+		}
+		
+		return gravitationalMultiplier;
+	}
+	
+	@Override
+	public void setDiameter(float diameter) {
+		if(diameter <= 0) {
+			this.diameter = -1.0f;
+		}
+		else {
+			this.diameter = diameter;
+		}
 	}
 
 	public List<SpawnListEntryNBT> getSpawnListEntries() {
@@ -881,10 +902,37 @@ public class DimensionProperties implements Cloneable, IDimensionProperties {
 		}
 		updateOrbit();
 	}
+	
+	//TODO This is constant as long as orbitalDist and parent mass stay constant; pre-compute
+	private double calculateVelocity() {
+		if(orbitalDist < 0) {
+			return 0.0;
+		}
+		
+		DimensionProperties parent = getParentProperties();
+		float mass;
+		
+		// This is how you mass, right? :(
+		if(parent != null) {
+			mass = parent.getGravitationalMultiplier();
+		}
+		else if(star != null){
+			mass = star.getSize();
+		}
+		else {
+			mass = 1.0f;
+		}
+		
+		//Of all the approximations, forgive me adding 1 here
+		//0 orbitalDist does NOT mean inside the orbited object, after all
+		return Math.sqrt(mass / (orbitalDist + 1)) * ORBITAL_VELOCITY_SCALE;
+	}
 
 	public void updateOrbit() {
 		this.prevOrbitalTheta = this.orbitTheta;
-		this.orbitTheta = (AdvancedRocketry.proxy.getWorldTimeUniversal(0)*(201-orbitalDist)*0.000002d) % (2*Math.PI);
+
+		// velocity = sqrt(G * massParent / distance)
+		this.orbitTheta = (AdvancedRocketry.proxy.getWorldTimeUniversal(0) * calculateVelocity()) % (2*Math.PI);
 	}
 
 	/**
@@ -1259,6 +1307,10 @@ public class DimensionProperties implements Cloneable, IDimensionProperties {
 			originalAtmosphereDensity = nbt.getInteger("originalAtmosphereDensity");
 		else 
 			originalAtmosphereDensity = atmosphereDensity;
+		
+		if(nbt.hasKey("diameter")) {
+			diameter = nbt.getFloat("diameter");
+		}
 
 		averageTemperature = nbt.getInteger("avgTemperature");
 		rotationalPeriod = nbt.getInteger("rotationalPeriod");
@@ -1433,6 +1485,10 @@ public class DimensionProperties implements Cloneable, IDimensionProperties {
 		nbt.setBoolean("hasRings", hasRings);
 		nbt.setInteger("sealevel", sealevel);
 		nbt.setInteger("genType", generatorType);
+		
+		if(diameter > 0) {
+			nbt.setFloat("diameter", diameter);
+		}
 		
 		//Hierarchy
 		if(!childPlanets.isEmpty()) {

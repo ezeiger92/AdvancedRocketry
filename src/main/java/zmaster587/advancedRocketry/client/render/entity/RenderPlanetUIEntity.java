@@ -56,6 +56,7 @@ public class RenderPlanetUIEntity extends Render<EntityUIPlanet> implements IRen
 		if(properties == null)
 			return;
 
+		//TODO use planet size
 		float sizeScale = Math.max(properties.gravitationalMultiplier*properties.gravitationalMultiplier*entity.getScale(), .5f);
 
 		GL11.glPushMatrix();

@@ -634,8 +634,9 @@ public class RenderAsteroidSky extends IRenderHandler {
 				GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 			}
 
-
-			renderPlanet2(buffer, parentPlanetIcon, 0,0,-100, (200-planetOrbitalDistance), multiplier, rotation, hasAtmosphere, parentAtmColor, parentRingColor, isGasGiant, false);
+			// TODO: scaling
+			float size = (200-planetOrbitalDistance);
+			renderPlanet2(buffer, parentPlanetIcon, 0,0,-100, size, multiplier, rotation, hasAtmosphere, parentAtmColor, parentRingColor, isGasGiant, false);
 			GL11.glPopMatrix();
 		}
 
@@ -718,7 +719,9 @@ public class RenderAsteroidSky extends IRenderHandler {
 	}
 
 	protected void renderPlanet(BufferBuilder buffer, ResourceLocation icon, float planetOrbitalDistance, float alphaMultiplier, double shadowAngle, boolean hasAtmosphere, float[] skyColor, float[] ringColor, boolean gasGiant, boolean hasRing) {
-		renderPlanet2(buffer, icon, 0, 0, -100, 10f*(200-planetOrbitalDistance)/100f, alphaMultiplier, shadowAngle, hasAtmosphere, skyColor, ringColor, gasGiant, hasRing);
+		// TODO: scaling
+		float size = 10f*(200-planetOrbitalDistance)/100f;
+		renderPlanet2(buffer, icon, 0, 0, -100, size, alphaMultiplier, shadowAngle, hasAtmosphere, skyColor, ringColor, gasGiant, hasRing);
 	}
 
 	protected void renderPlanet2(BufferBuilder buffer, ResourceLocation icon, int locationX, int locationY, double zLevel, float size, float alphaMultiplier, double shadowAngle, boolean hasAtmosphere, float[] skyColor, float[] ringColor, boolean gasGiant, boolean hasRing) {

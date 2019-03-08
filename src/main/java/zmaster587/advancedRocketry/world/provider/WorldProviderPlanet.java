@@ -233,6 +233,7 @@ public class WorldProviderPlanet extends WorldProvider implements IPlanetaryProv
 		int solarDistance = properties.getSolarOrbitalDistance();
 		float planetaryDistance = properties.getParentOrbitalDistance();
 
+		// TODO: scaling
 		float difference = solarDistance/(200-planetaryDistance + 0.00001f);
 		
 		

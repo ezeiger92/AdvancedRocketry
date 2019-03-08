@@ -411,7 +411,7 @@ public class XMLPlanetLoader {
 			}
 			else if(planetPropertyNode.getNodeName().equalsIgnoreCase("orbitalPhi")) {
 				try {
-					properties.orbitalPhi = (Integer.parseInt(planetPropertyNode.getTextContent()) % 360) * 180/Math.PI;
+					properties.orbitalPhi = (Integer.parseInt(planetPropertyNode.getTextContent()) % 360);
 				} catch (NumberFormatException e) {
 					AdvancedRocketry.logger.warn("Invalid orbitalTheta specified"); //TODO: more detailed error msg
 				}
@@ -466,6 +466,14 @@ public class XMLPlanetLoader {
 				String text = planetPropertyNode.getTextContent();
 				if(text != null && !text.isEmpty() && text.equalsIgnoreCase("true")) {
 					Configuration.initiallyKnownPlanets.add(properties.getId());
+				}
+			}
+			else if(planetPropertyNode.getNodeName().equalsIgnoreCase("diameter")) {
+				String text = planetPropertyNode.getTextContent();
+				try {
+					properties.setDiameter(Integer.parseInt(text) / 100f);
+				} catch (NumberFormatException e) {
+					AdvancedRocketry.logger.warn("Error Reading star " + star.getName());
 				}
 			}
 
@@ -694,11 +702,15 @@ public class XMLPlanetLoader {
 
 		outputString = outputString + tabLen + "\t<fogColor>" + properties.fogColor[0] + "," + properties.fogColor[1] + "," + properties.fogColor[2] + "</fogColor>\n";
 		outputString = outputString + tabLen + "\t<skyColor>" + properties.skyColor[0] + "," + properties.skyColor[1] + "," + properties.skyColor[2] + "</skyColor>\n";
-		outputString = outputString + tabLen + "\t<gravitationalMultiplier>" + (int)(properties.getGravitationalMultiplier()*100f) + "</gravitationalMultiplier>\n";
+		outputString = outputString + tabLen + "\t<gravitationalMultiplier>" + Math.round(properties.getGravitationalMultiplier() * 100f) + "</gravitationalMultiplier>\n";
 		outputString = outputString + tabLen + "\t<orbitalDistance>" + properties.getOrbitalDist() + "</orbitalDistance>\n";
-		outputString = outputString + tabLen + "\t<orbitalPhi>" + (int)(properties.orbitalPhi* Math.PI/180) + "</orbitalPhi>\n";
+		outputString = outputString + tabLen + "\t<orbitalPhi>" + (int)(properties.orbitalPhi) + "</orbitalPhi>\n";
 		outputString = outputString + tabLen + "\t<rotationalPeriod>" + (int)properties.rotationalPeriod + "</rotationalPeriod>\n";
 		outputString = outputString + tabLen + "\t<atmosphereDensity>" + (int)properties.getAtmosphereDensity() + "</atmosphereDensity>\n";
+		
+		if(properties.getDiameter() > 0) {
+			outputString = outputString + tabLen + "\t<diameter>" + Math.round(properties.getDiameter() * 100f) + "</diameter>\n";
+		}
 
 		if(properties.getSeaLevel() != 63)
 			outputString = outputString + tabLen + "\t<seaLevel>" + properties.getSeaLevel() + "</seaLevel>\n";

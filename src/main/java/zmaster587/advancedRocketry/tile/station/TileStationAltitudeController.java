@@ -72,6 +72,7 @@ public class TileStationAltitudeController extends TileEntity implements IModula
 		if(world.isRemote) {
 			ISpaceObject object = SpaceObjectManager.getSpaceManager().getSpaceStationFromBlockCoords(pos);
 			if(object != null) {
+				// TODO: scaling
 				moduleGrav.setText(String.format("%s %.0fKm",LibVulpes.proxy.getLocalizedString("msg.stationaltctrl.alt"), object.getOrbitalDistance()*200 + 100 ));
 				maxGravBuildSpeed.setText(String.format("%s%.1f", LibVulpes.proxy.getLocalizedString("msg.stationaltctrl.maxaltrate"), 7200D*object.getMaxRotationalAcceleration()));
 			}

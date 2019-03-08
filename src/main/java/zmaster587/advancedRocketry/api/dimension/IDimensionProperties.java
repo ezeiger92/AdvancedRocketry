@@ -82,6 +82,18 @@ public interface IDimensionProperties {
 	public float getGravitationalMultiplier();
 	
 	/**
+	 * sets the size of the object. 1.0 is earth-like.
+	 * values less than 0 will tell AR to use the gravity multiplier as its size
+	 */
+	public void setDiameter(float diameter);
+	
+	/**
+	 * gets the object size. If not specified, it is approximated by returning
+	 * the gravity multiplier instead
+	 */
+	public float getDiameter();
+	
+	/**
 	 * Adds a satellite to this DIM
 	 * @param satellite satellite to add
 	 * @param world world to add the satellite to
